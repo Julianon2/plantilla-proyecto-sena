@@ -83,7 +83,6 @@ a:hover { color: var(--color-secundario); }
   top: 0;
   z-index: 100;
 
-  /* Flexbox: logo izquierda · hamburguesa + nav derecha */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -109,11 +108,14 @@ a:hover { color: var(--color-secundario); }
   white-space: nowrap;
 }
 
-/* Navegación */
+/* Navegación — centrada en el header */
 .nav-menu {
   display: flex;
   gap: 6px;
   align-items: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .nav-menu a {
@@ -297,7 +299,7 @@ a:hover { color: var(--color-secundario); }
   background: var(--color-blanco);
   border: 1px solid var(--color-borde);
   border-radius: var(--radio-grande);
-  overflow: hidden;
+  overflow: visible;
   box-shadow: var(--sombra);
   transition: transform .25s, box-shadow .25s;
   display: flex;
@@ -823,4 +825,252 @@ a:hover { color: var(--color-secundario); }
   .page-header { padding: 40px 16px; }
   .seccion-tarjetas { padding: 40px 16px; }
 
+}
+/* ── MODAL PRODUCTO · S06 ─────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.visible {
+  display: flex;
+}
+
+.modal-caja {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18);
+}
+
+.modal-cerrar {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: #f1f5f9;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-icono {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.modal-titulo {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #1a1a2e;
+}
+
+.modal-desc {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.modal-precio {
+  font-size: 28px;
+  font-weight: 900;
+  color: #39a900;
+  margin-bottom: 20px;
+}
+
+.modal-btn-carrito {
+  background: #39a900;
+  color: #fff;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+}
+
+.modal-btn-carrito:hover {
+  background: #2d8400;
+}
+/* ── BARRA DE PROGRESO SCROLL · S06 ──────────────── */
+.barra-scroll {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  width: 0%;
+  background: linear-gradient(90deg, #39a900, #ff6b00);
+  z-index: 1000;
+  transition: width 0.1s;
+}
+/* ── BADGE HOVER TARJETA · S06 ───────────────────── */
+.tarjeta {
+  position: relative; /* necesario para posicionar el badge */
+}
+
+.badge-disponible {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #39a900;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  display: none;
+  z-index: 10;
+}
+
+.badge-disponible.visible {
+  display: inline-block;
+}
+
+/* ===== S07: TEMA OSCURO ===== */
+
+/* Mismo padding que los links del nav — así queda alineado */
+.btn-tema {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 15px;
+  color: white;
+  transition: background 0.2s, border-color 0.2s;
+  line-height: 1;
+}
+
+.btn-tema:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Variables del tema oscuro */
+body.tema-oscuro {
+  --color-fondo:       #0f172a;
+  --color-blanco:      #1e293b;
+  --color-texto:       #e2e8f0;
+  --color-texto-suave: #94a3b8;
+  --color-borde:       #334155;
+}
+
+body.tema-oscuro .seccion-header h2 { color: #f1f5f9; }
+
+body.tema-oscuro .tarjeta {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.tema-oscuro .tarjeta-nombre { color: #f1f5f9; }
+
+body.tema-oscuro .modal-caja  { background: #1e293b; color: #f1f5f9; }
+body.tema-oscuro .modal-titulo { color: #f1f5f9; }
+body.tema-oscuro .modal-desc   { color: #94a3b8; }
+
+.header-acciones {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* ===== S07: BADGE CARRITO ===== */
+.carrito-badge-contenedor {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.carrito-badge-contenedor > span:first-child {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.carrito-badge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: var(--color-primario);
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.carrito-badge.oculto {
+  display: none;
+}
+/* ===== S07: PÁGINA CARRITO ===== */
+.seccion-carrito {
+  max-width: 800px;
+  margin: 60px auto;
+  padding: 0 32px;
+}
+
+.carrito-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--color-blanco);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  padding: 16px 20px;
+  margin-bottom: 12px;
+}
+
+.carrito-item-icono { font-size: 32px; }
+.carrito-item-info  { flex: 1; }
+.carrito-item-nombre { font-weight: 700; color: var(--color-oscuro); }
+.carrito-item-precio { color: var(--color-primario); font-weight: 700; }
+.carrito-item-fecha  { font-size: 12px; color: var(--color-texto-suave); }
+
+.carrito-acciones {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  justify-content: center;
+}
+
+.carrito-vacio {
+  text-align: center;
+  padding: 40px;
+  color: var(--color-texto-suave);
+}
+/* ===== S08: ERROR FETCH ===== */
+.error-fetch {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 32px;
+  color: #ef4444;
+  font-size: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
 }

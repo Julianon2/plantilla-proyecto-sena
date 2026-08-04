@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+  <!-- BARRA SCROLL — S06: div vacío, el CSS lo posiciona y el JS le da el ancho -->
+<div class="barra-scroll" id="barra-scroll"></div>
 
   <!-- ============================================================
        HEADER — Copia este bloque IGUAL en todas las páginas
@@ -47,7 +49,15 @@
       <a href="productos.html">Productos</a>
       <a href="nosotros.html">Nosotros</a>
       <a href="contacto.html">Contacto</a>
+      <a href="registro.html">Registro</a>
     </nav>
+    <div class="header-acciones">
+      <button id="btn-tema" class="btn-tema" aria-label="Cambiar tema">🌙</button>
+      <div class="carrito-badge-contenedor">
+        <span>🛒</span>
+        <span class="carrito-badge" id="carrito-badge">0</span>
+      </div>
+    </div>
   </header>
 
   <!-- ============================================================
@@ -87,91 +97,7 @@
         <p>Los equipos más populares de nuestra tienda</p>
       </div>
 
-      <div class="grid-tarjetas" id="grid-tarjetas">
-
-        <article class="tarjeta" data-id="1">
-          <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=250&fit=crop&q=80"
-               alt="MacBook Pro M3"
-               class="tarjeta-img">
-          <div class="tarjeta-info">
-            <h3 class="tarjeta-nombre">MacBook Pro M3</h3>
-            <p class="tarjeta-desc">Potencia profesional con chip M3. 16 GB RAM, 512 GB SSD. Ideal para desarrollo y diseño.</p>
-            <div class="tarjeta-pie">
-              <span class="tarjeta-precio">$8.999.000</span>
-              <button class="btn-accion">Ver más</button>
-            </div>
-          </div>
-        </article>
-
-        <article class="tarjeta" data-id="2">
-          <img src="https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=250&fit=crop&q=80"
-               alt="iPhone 15 Pro"
-               class="tarjeta-img">
-          <div class="tarjeta-info">
-            <h3 class="tarjeta-nombre">iPhone 15 Pro</h3>
-            <p class="tarjeta-desc">Chip A17 Pro, cámara de 48 MP, Dynamic Island. El smartphone más avanzado de Apple.</p>
-            <div class="tarjeta-pie">
-              <span class="tarjeta-precio">$4.299.000</span>
-              <button class="btn-accion">Ver más</button>
-            </div>
-          </div>
-        </article>
-
-        <article class="tarjeta" data-id="3">
-          <img src="https://images.unsplash.com/photo-1591488320449-011701bb6704?w=400&h=250&fit=crop&q=80"
-               alt="RTX 4070 Super"
-               class="tarjeta-img">
-          <div class="tarjeta-info">
-            <h3 class="tarjeta-nombre">RTX 4070 Super</h3>
-            <p class="tarjeta-desc">Tarjeta gráfica NVIDIA de última generación. 12 GB GDDR6X. Gaming 4K sin compromiso.</p>
-            <div class="tarjeta-pie">
-              <span class="tarjeta-precio">$2.399.000</span>
-              <button class="btn-accion">Ver más</button>
-            </div>
-          </div>
-        </article>
-
-        <article class="tarjeta" data-id="4">
-          <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=250&fit=crop&q=80"
-               alt="Dell XPS 15"
-               class="tarjeta-img">
-          <div class="tarjeta-info">
-            <h3 class="tarjeta-nombre">Dell XPS 15</h3>
-            <p class="tarjeta-desc">Intel Core i7 13va gen, 32 GB RAM, pantalla OLED 4K. El laptop Windows más elegante.</p>
-            <div class="tarjeta-pie">
-              <span class="tarjeta-precio">$6.799.000</span>
-              <button class="btn-accion">Ver más</button>
-            </div>
-          </div>
-        </article>
-
-        <article class="tarjeta" data-id="5">
-          <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=250&fit=crop&q=80"
-               alt="Samsung Galaxy S24"
-               class="tarjeta-img">
-          <div class="tarjeta-info">
-            <h3 class="tarjeta-nombre">Samsung Galaxy S24</h3>
-            <p class="tarjeta-desc">Snapdragon 8 Gen 3, IA integrada, cámara de 200 MP. El Android más potente del año.</p>
-            <div class="tarjeta-pie">
-              <span class="tarjeta-precio">$3.199.000</span>
-              <button class="btn-accion">Ver más</button>
-            </div>
-          </div>
-        </article>
-
-        <article class="tarjeta" data-id="6">
-          <img src="https://images.unsplash.com/photo-1555618254-4d2b04e4b00d?w=400&h=250&fit=crop&q=80"
-               alt="Monitor LG UltraWide 34"
-               class="tarjeta-img">
-          <div class="tarjeta-info">
-            <h3 class="tarjeta-nombre">Monitor LG UltraWide 34"</h3>
-            <p class="tarjeta-desc">Panel IPS curvo 34 pulgadas, resolución 3440×1440, 144 Hz. Productividad y gaming.</p>
-            <div class="tarjeta-pie">
-              <span class="tarjeta-precio">$1.899.000</span>
-              <button class="btn-accion">Ver más</button>
-            </div>
-          </div>
-        </article>
+      <div class="grid-tarjetas" id="grid-tarjetas">       
 
       </div><!-- /grid-tarjetas -->
 
@@ -217,7 +143,7 @@
     <div class="footer-contenido">
       <div class="footer-marca">
         <span class="logo-icono">🏪</span>
-        <span class="logo-texto">Mi Proyecto</span>
+        <span class="logo-texto">TechStore Pro</span>
         <p>Tu tienda de tecnología en línea.</p>
       </div>
       <nav class="footer-nav">
@@ -239,7 +165,20 @@
     </div>
   </footer>
 
+  <!-- MODAL PRODUCTO — S06 -->
+  <div class="modal-overlay" id="modal-producto">
+    <div class="modal-caja">
+      <button class="modal-cerrar" id="modal-cerrar">×</button>
+      <div class="modal-icono" id="modal-icono">💻</div>
+      <h2 class="modal-titulo" id="modal-titulo">Nombre del producto</h2>
+      <p class="modal-desc" id="modal-desc">Descripción del producto</p>
+      <p class="modal-precio" id="modal-precio">$0</p>
+      <button class="modal-btn-carrito">🛒 Agregar al carrito</button>
+    </div>
+  </div>
+
   <script src="js/main.js"></script>
+  <!-- El modal SIEMPRE debe ir antes del script -->
 
 
 </body>

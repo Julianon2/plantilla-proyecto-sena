@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+   <!-- BARRA SCROLL — S06: div vacío, el CSS lo posiciona y el JS le da el ancho -->
+<div class="barra-scroll" id="barra-scroll"></div>
 
   <!-- HEADER — Igual en todas las páginas -->
   <header class="header">
@@ -22,7 +24,9 @@
       <a href="productos.html">Productos</a>
       <a href="nosotros.html">Nosotros</a>
       <a href="contacto.html" class="activo">Contacto</a>
+      <a href="registro.html">Registro</a>
     </nav>
+    <button id="btn-tema" class="btn-tema" aria-label="Cambiar tema">🌙</button>
   </header>
 
   <main>
@@ -182,7 +186,7 @@
     <div class="footer-contenido">
       <div class="footer-marca">
         <span class="logo-icono">🏪</span>
-        <span class="logo-texto">Mi Proyecto</span>
+        <span class="logo-texto">TechStore Pro</span>
         <p>Tu tienda de tecnología en línea.</p>
       </div>
       <nav class="footer-nav">

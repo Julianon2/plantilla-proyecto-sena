@@ -135,69 +135,19 @@ if (formulario) {  // solo corre en contacto.html donde existe el formulario
   });
 }
 
-// ================================================
-// EJERCICIO 3: TARJETAS DINÁMICAS DESDE ARRAY
-// Funciona en: index.html (y en productos.html si quieres)
-// Requiere: <div id="grid-tarjetas"> vacío en index.html
-// ================================================
-
-// PASO 1 — Definir los datos en un array
-// Cada { } es un producto. Personaliza con los datos REALES de tu proyecto.
-// Las URLs de imagen son de Unsplash — funcionan sin descargar nada.
-const productos = [
-  {
-    id: 1,
-    nombre: "✏️ Nombre de tu producto 1",
-    descripcion: "✏️ Descripción corta de este producto.",
-    precio: "✏️ $XX.000",
-    imagen: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=250&fit=crop"
-  },
-  {
-    id: 2,
-    nombre: "✏️ Nombre de tu producto 2",
-    descripcion: "✏️ Descripción corta de este producto.",
-    precio: "✏️ $XX.000",
-    imagen: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=250&fit=crop"
-  },
-  {
-    id: 3,
-    nombre: "✏️ Nombre de tu producto 3",
-    descripcion: "✏️ Descripción corta de este producto.",
-    precio: "✏️ $XX.000",
-    imagen: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400&h=250&fit=crop"
-  },
-  {
-    id: 4,
-    nombre: "✏️ Nombre de tu producto 4",
-    descripcion: "✏️ Descripción corta de este producto.",
-    precio: "✏️ $XX.000",
-    imagen: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=250&fit=crop"
-  },
-  {
-    id: 5,
-    nombre: "✏️ Nombre de tu producto 5",
-    descripcion: "✏️ Descripción corta de este producto.",
-    precio: "✏️ $XX.000",
-    imagen: "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400&h=250&fit=crop"
-  },
-  {
-    id: 6,
-    nombre: "✏️ Nombre de tu producto 6",
-    descripcion: "✏️ Descripción corta de este producto.",
-    precio: "✏️ $XX.000",
-    imagen: "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&h=250&fit=crop"
-  }
-];
-
 // PASO 2 — Función que convierte UN objeto producto en HTML de tarjeta
 // Usa backtick ` (no comillas) para escribir HTML con variables ${...}
 // Las clases .tarjeta .tarjeta-img etc. ya están definidas en styles.css
 function crearTarjeta(producto) {
   return `
-    <article class="tarjeta" data-id="${producto.id}">
-      <img src="${producto.imagen}"
-           alt="${producto.nombre}"
-           class="tarjeta-img">
+    <article class="tarjeta"
+      data-id="${producto.id}"
+      data-icono="${producto.icono || '📦'}"
+      data-nombre="${producto.nombre}"
+      data-desc="${producto.descripcion}"
+      data-precio="${producto.precio}">
+      <span class="badge-disponible">✓ Disponible</span>
+      <img src="${producto.imagen}" alt="${producto.nombre}" class="tarjeta-img">
       <div class="tarjeta-info">
         <h3 class="tarjeta-nombre">${producto.nombre}</h3>
         <p class="tarjeta-desc">${producto.descripcion}</p>
@@ -209,14 +159,299 @@ function crearTarjeta(producto) {
     </article>
   `;
 }
+// ================================================
+// S08: CARGAR PRODUCTOS DESDE JSON
+// Reemplaza el array hardcodeado de S03.
+// Funciona en: productos.html (donde existe #grid-tarjetas)
+// Requiere: data/productos.json con el array de productos
+// ================================================
 
-// PASO 3 — Buscar el contenedor en index.html
-// Tu index.html tiene:  <div id="grid-tarjetas">
-const gridTarjetas = document.querySelector('#grid-tarjetas');
+async function cargarProductos() {
+  const grid = document.querySelector('#grid-tarjetas');
+  if (!grid) return; // solo correr en páginas que tienen el grid
 
-// PASO 4 — Llenar el grid con las tarjetas generadas
-// .map(crearTarjeta) → convierte cada objeto del array en HTML (string)
-// .join('')         → une todos esos strings en uno solo
-if (gridTarjetas) {  // ✏️ solo corre en páginas que tienen #grid-tarjetas
-  gridTarjetas.innerHTML = productos.map(crearTarjeta).join('');
+  try {
+    // PASO 1 — Pedir el archivo JSON al servidor
+    // await pausa aquí hasta que llegue la respuesta (el sobre)
+    const respuesta = await fetch('data/productos.json');
+
+    // PASO 2 — Leer el contenido del JSON como array JavaScript
+    // .json() también es asíncrono → necesita su propio await
+    const productos = await respuesta.json();
+
+    // PASO 3 — Renderizar las tarjetas en el grid
+    // productos.map(crearTarjeta) convierte cada objeto en HTML
+    grid.innerHTML = productos.map(crearTarjeta).join('');
+
+    // PASO 4 — Reconectar todo lo que depende de las tarjetas
+    // Estas funciones buscan .tarjeta en el HTML → deben ir DESPUÉS del innerHTML
+    registrarBotonesModal(); // botones "Ver más" → abrir modal
+    registrarBadgeHover();   // badge "✓ Disponible" al hacer hover
+    registrarBuscador();     // filtro de búsqueda en tiempo real
+
+  } catch (error) {
+    // Si fetch falla (sin Live Server, archivo no existe, JSON roto)
+    // muestra un mensaje visible en la página en vez de romper silenciosamente
+    grid.innerHTML = `
+      <div class="error-fetch">
+        <p>⚠️ No se pudieron cargar los productos.</p>
+        <button onclick="cargarProductos()" class="btn btn-primario">Reintentar</button>
+      </div>
+    `;
+    console.error('Error al cargar productos:', error);
+  }
 }
+
+cargarProductos(); // ejecutar al cargar la página
+
+// ══════════════════════════════════════════════
+// EJERCICIO 1 · MODAL PRODUCTO
+// Solo en productos.html (donde existe #modal-producto)
+// ══════════════════════════════════════════════
+
+const modal = document.querySelector('#modal-producto');
+
+if (modal) {
+  const btnCerrar = document.querySelector('#modal-cerrar');
+
+  // Llena el modal con los datos del producto y lo hace visible
+  // tarjeta.dataset lee los atributos data-* del <article class="tarjeta">
+  function abrirModal(tarjeta) {
+    document.querySelector('#modal-icono').textContent  = tarjeta.dataset.icono  || '📦';
+    document.querySelector('#modal-titulo').textContent = tarjeta.dataset.nombre || 'Producto';
+    document.querySelector('#modal-desc').textContent   = tarjeta.dataset.desc   || '';
+    document.querySelector('#modal-precio').textContent = tarjeta.dataset.precio || '';
+    modal.classList.add('visible');
+  }
+
+  // Se llama desde cargarProductos() DESPUÉS de grid.innerHTML
+  // porque los botones .btn-accion los crea crearTarjeta() dinámicamente
+  function registrarBotonesModal() {
+    document.querySelectorAll('.btn-accion').forEach(function(boton) {
+      boton.addEventListener('click', function() {
+        abrirModal(boton.closest('.tarjeta'));
+      });
+    });
+  }
+
+  btnCerrar.addEventListener('click', function() {
+    modal.classList.remove('visible');
+  });
+
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) modal.classList.remove('visible');
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') modal.classList.remove('visible');
+  });
+}
+// ══════════════════════════════════════════════
+// EJERCICIO 2 · BARRA DE PROGRESO SCROLL
+// Funciona en todas las páginas
+// ══════════════════════════════════════════════
+
+const barraScroll = document.querySelector('#barra-scroll');
+
+if (barraScroll) {
+  window.addEventListener('scroll', function() {
+    // scrollY = cuántos píxeles hemos bajado
+    // scrollHeight - innerHeight = total de píxeles posibles
+    const totalDesplazamiento = document.body.scrollHeight - window.innerHeight;
+    const porcentaje = (window.scrollY / totalDesplazamiento) * 100;
+    barraScroll.style.width = porcentaje + '%';
+  });
+}
+// ══════════════════════════════════════════════
+// EJERCICIO 3 · BADGE HOVER EN TARJETAS
+// Solo en productos.html
+// Se llama desde cargarProductos() — las tarjetas deben existir primero
+// ══════════════════════════════════════════════
+
+// Muestra el badge "✓ Disponible" al pasar el mouse por una tarjeta
+function registrarBadgeHover() {
+  document.querySelectorAll('.tarjeta').forEach(function(tarjeta) {
+    const badge = tarjeta.querySelector('.badge-disponible');
+    if (badge) {
+      tarjeta.addEventListener('mouseover', function() { badge.classList.add('visible'); });
+      tarjeta.addEventListener('mouseout',  function() { badge.classList.remove('visible'); });
+    }
+  });
+}
+
+// Filtra las tarjetas en tiempo real según lo que escribe el usuario
+// Se llama desde cargarProductos() — las tarjetas deben existir primero
+function registrarBuscador() {
+  const buscador = document.querySelector('#buscador');
+  if (!buscador) return; // solo correr en páginas con buscador
+  buscador.addEventListener('input', function() {
+    // .toLowerCase() para que "macbook" encuentre "MacBook"
+    const termino = buscador.value.toLowerCase();
+    document.querySelectorAll('.tarjeta').forEach(function(tarjeta) {
+      const nombre = tarjeta.dataset.nombre.toLowerCase();
+      // muestra u oculta según si el nombre incluye el término buscado
+      tarjeta.style.display = nombre.includes(termino) ? 'block' : 'none';
+    });
+  });
+}
+// ===== S07: TEMA OSCURO =====
+
+// ✏️ COMPLETA: Lee el tema guardado en LocalStorage
+// Si existe, aplícalo al body. Si no existe, no hagas nada.
+function aplicarTemaGuardado() {
+  const tema = localStorage.getItem('tema');
+  if (tema === 'oscuro') {
+    document.body.classList.add('tema-oscuro');
+    const btn = document.getElementById('btn-tema');
+    if (btn) btn.textContent = '☀️'; // cambiar el ícono
+  }
+}
+
+// ✏️ COMPLETA: Alterna entre claro y oscuro y guarda la preferencia
+function toggleTema() {
+  const esOscuro = document.body.classList.toggle('tema-oscuro');
+  const btn = document.getElementById('btn-tema');
+  
+  if (esOscuro) {
+    localStorage.setItem('tema', 'oscuro');
+    if (btn) btn.textContent = '☀️';
+  } else {
+    localStorage.setItem('tema', 'claro');
+    if (btn) btn.textContent = '🌙';
+  }
+}
+
+// Conectar el botón y aplicar el tema al cargar
+const btnTema = document.getElementById('btn-tema');
+if (btnTema) {
+  btnTema.addEventListener('click', toggleTema);
+}
+
+aplicarTemaGuardado(); // ← ejecutar al cargar la página
+
+// ===== S07: CARRITO DE COMPRAS =====
+
+// Lee el carrito de LocalStorage (o devuelve array vacío)
+function leerCarrito() {
+  const guardado = localStorage.getItem('carrito');
+  return guardado ? JSON.parse(guardado) : [];
+}
+
+// Guarda el carrito en LocalStorage y actualiza el badge
+function guardarCarrito(carrito) {
+  localStorage.setItem('carrito', JSON.stringify(carrito));
+  actualizarBadge();
+}
+
+// ✏️ COMPLETA: Actualiza el número que aparece en el badge del header
+function actualizarBadge() {
+  const badge = document.getElementById('carrito-badge');
+  if (!badge) return; // el badge puede no existir en todas las páginas
+  
+  const carrito = leerCarrito();
+  badge.textContent = carrito.length;
+  
+  badge.classList.remove('oculto');
+}
+
+// ✏️ COMPLETA: Agrega un producto al carrito
+function agregarAlCarrito(producto) {
+  const carrito = leerCarrito();
+  carrito.push(producto);
+  guardarCarrito(carrito); // guarda y actualiza badge
+  
+  // Feedback visual al usuario
+  alert(`✅ ${producto.nombre} agregado al carrito`);
+}
+
+// Conectar el botón "Agregar al carrito" del modal
+const btnModalCarrito = document.querySelector('.modal-btn-carrito');
+if (btnModalCarrito) {
+  btnModalCarrito.addEventListener('click', function() {
+    // Leer los datos del producto desde el modal
+    const producto = {
+      nombre: document.getElementById('modal-titulo').textContent,
+      precio: document.getElementById('modal-precio').textContent,
+      icono: document.getElementById('modal-icono').textContent,
+      fecha:  new Date().toLocaleDateString('es-CO')
+    };
+    
+    agregarAlCarrito(producto);
+    
+    // Cerrar el modal
+    document.getElementById('modal-producto').classList.remove('visible');
+  });
+}
+
+// Inicializar el badge al cargar la página
+actualizarBadge();
+
+// Clic en el badge → ir a carrito.html
+const badgeContenedor = document.querySelector('.carrito-badge-contenedor');
+if (badgeContenedor) {
+  badgeContenedor.addEventListener('click', function() {
+    window.location.href = 'carrito.html';
+  });
+}
+
+
+// ===== S07: PÁGINA CARRITO =====
+
+// ✏️ COMPLETA: Solo ejecutar si estamos en carrito.html
+function mostrarPaginaCarrito() {
+  const lista = document.getElementById('lista-carrito');
+  const resumen = document.getElementById('carrito-resumen');
+  if (!lista) return; // no estamos en carrito.html
+  
+  const carrito = leerCarrito();
+  
+  if (carrito.length === 0) {
+    resumen.textContent = 'Tu carrito está vacío';
+    lista.innerHTML = '<p class="carrito-vacio">No hay productos en el carrito. <a href="index.html">Ver productos →</a></p>';
+    return;
+  }
+  
+  resumen.textContent = `${carrito.length} producto(s) en el carrito`;
+  
+  lista.innerHTML = ''; // limpiar antes de renderizar
+  
+  carrito.forEach(function(producto, indice) {
+    const item = document.createElement('div');
+    item.classList.add('carrito-item');
+    item.innerHTML = `
+      <span class="carrito-item-icono">${producto.icono}</span>
+      <div class="carrito-item-info">
+        <div class="carrito-item-nombre">${producto.nombre}</div>
+        <div class="carrito-item-precio">${producto.precio}</div>
+        <div class="carrito-item-fecha">Agregado: ${producto.fecha}</div>
+      </div>
+      <button class="btn-eliminar" data-indice="${indice}">Eliminar</button>
+    `;
+    lista.appendChild(item);
+  });
+  
+  // Conectar los botones "Eliminar"
+  document.querySelectorAll('.btn-eliminar').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const indice = parseInt(this.dataset.indice);
+      const carritoActual = leerCarrito();
+      carritoActual.splice(indice, 1); // eliminar ese índice
+      guardarCarrito(carritoActual);
+      mostrarPaginaCarrito(); // re-renderizar
+    });
+  });
+}
+
+// Botón vaciar carrito
+const btnVaciar = document.getElementById('btn-vaciar');
+if (btnVaciar) {
+  btnVaciar.addEventListener('click', function() {
+    if (confirm('¿Seguro que quieres vaciar el carrito?')) {
+      localStorage.removeItem('carrito');
+      actualizarBadge();
+      mostrarPaginaCarrito();
+    }
+  });
+}
+
+mostrarPaginaCarrito(); // llamar al cargar

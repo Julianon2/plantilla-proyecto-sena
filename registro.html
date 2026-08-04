@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro — TechStore Pro</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+   <!-- BARRA SCROLL — S06: div vacío, el CSS lo posiciona y el JS le da el ancho -->
+<div class="barra-scroll" id="barra-scroll"></div>
+
+  <!-- HEADER — Igual en todas las páginas -->
+  <header class="header">
+    <div class="header-logo">
+      <span class="logo-icono">💻</span>
+      <span class="logo-texto">TechStore Pro</span>
+    </div>
+    <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="nav-menu" class="nav-menu">
+      <a href="index.html">Inicio</a>
+      <a href="productos.html">Productos</a>
+      <a href="nosotros.html">Nosotros</a>
+      <a href="contacto.html">Contacto</a>
+      <a href="registro.html" class="activo">Registro</a>
+    </nav>
+    <button id="btn-tema" class="btn-tema" aria-label="Cambiar tema">🌙</button>
+  </header>
+
+  <main>
+<section class="seccion-formulario" style="max-width:600px;margin:60px auto;padding:0 24px;">
+  <h1 style="margin-bottom:32px;">Crear cuenta</h1>
+
+  <form id="form-registro" novalidate>
+
+    <!-- CAMPO NOMBRE — completo para que veas el patrón -->
+    <div class="campo">
+      <label for="reg-nombre">Nombre completo</label>
+      <input type="text" id="reg-nombre" placeholder="Tu nombre">
+      <span class="error" id="error-reg-nombre"></span>
+    </div>
+
+    <!-- ✏️ CAMPO EMAIL — construye tú siguiendo el mismo patrón -->
+    <!-- id del input: reg-email | id del error: error-reg-email -->
+    <!-- type: email | placeholder: correo@ejemplo.com -->
+
+    <div class="campo">
+      <label for="reg-nombre">Correo electrónico</label>
+      <input type="text" id="reg-email" placeholder="correo@ejemplo.com">
+      <span class="error" id="error-reg-email"></span>
+    </div>
+
+    <!-- CAMPO DEPARTAMENTO — completo: es un select, no un input -->
+    <div class="campo">
+      <label for="reg-departamento">Departamento</label>
+      <!-- JavaScript llenará este select con los 33 departamentos -->
+      <select id="reg-departamento">
+        <option value="">Cargando departamentos...</option>
+      </select>
+      <span class="error" id="error-reg-departamento"></span>
+    </div>
+
+    <!-- ✏️ CAMPO MUNICIPIO — construye tú siguiendo el patrón del departamento -->
+    <!-- id del select: reg-municipio | id del error: error-reg-municipio -->
+    <!-- El select empieza disabled con texto: "Primero elige un departamento" -->
+    <div class="campo">
+      <label for="reg-municipio">Municipio</label>
+      <!-- JavaScript llenará este select con los 33 departamentos -->
+      <select id="reg-municipio">
+        <option value="">Primero elige un departamento</option>
+      </select>
+      <span class="error" id="error-reg-municipio"></span>
+    </div>
+
+   <button type="submit" class="btn btn-primario" style="width:100%;margin-top:16px;">
+      Crear cuenta
+    </button>
+
+    <div id="registro-exito" style="display:none;margin-top:20px;padding:16px;background:#dcfce7;border-radius:8px;color:#166534;">
+      ✅ Cuenta creada correctamente. <a href="index.html">Ir a la tienda →</a>
+    </div>
+        
+  </form>
+
+  <div id="resumen-registro" style="display:none;"></div>
+
+</section>
+
+  </main>
+
+  <!-- FOOTER — Igual en todas las páginas -->
+  <footer class="footer">
+    <div class="footer-contenido">
+      <div class="footer-marca">
+        <span class="logo-icono">🏪</span>
+        <span class="logo-texto">TechStore Pro</span>
+        <p>Tu tienda de tecnología en línea.</p>
+      </div>
+      <nav class="footer-nav">
+        <h4>Páginas</h4>
+        <a href="index.html">Inicio</a>
+        <a href="productos.html">Productos</a>
+        <a href="nosotros.html">Nosotros</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+      <div class="footer-contacto">
+        <h4>Contacto</h4>
+        <p>📍 Ciudad, Departamento</p>
+        <p>📞 300 000 0000</p>
+        <p>✉️ info@techstorepro.co</p>
+      </div>
+    </div>
+    <div class="footer-copy">
+      <p>&copy; 2026 TechStore Pro — Todos los derechos reservados</p>
+    </div>
+  </footer>
+  
+<script src="js/main.js"></script>
+<script src="js/registro.js"></script>
+
+</body>
+</html>

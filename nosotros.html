@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+   <!-- BARRA SCROLL — S06: div vacío, el CSS lo posiciona y el JS le da el ancho -->
+<div class="barra-scroll" id="barra-scroll"></div>
 
   <!-- HEADER — Igual en todas las páginas -->
   <header class="header">
@@ -22,7 +24,9 @@
       <a href="productos.html">Productos</a>
       <a href="nosotros.html" class="activo">Nosotros</a>
       <a href="contacto.html">Contacto</a>
+      <a href="registro.html">Registro</a>
     </nav>
+    <button id="btn-tema" class="btn-tema" aria-label="Cambiar tema">🌙</button>
   </header>
 
   <main>
@@ -41,23 +45,22 @@
       <div class="mision-texto">
         <!-- ✏️ Personaliza con la historia real de tu proyecto -->
         <h2>Nuestra historia</h2>
-        <p>Cuenta brevemente el origen de tu proyecto o negocio. ¿Por qué nació? ¿Qué problema resuelve? ¿Cuándo comenzó?</p>
-        <p>Puedes hablar sobre los fundadores, el contexto local (Garzón, Huila) y el impacto que quieren generar en la comunidad.</p>
+        <p>TechStore Pro nació en Garzón, Huila, con una misión clara: acercar la mejor tecnología a las familias y empresas del sur colombiano. Iniciamos en 2023 como una pequeña tienda y hoy somos el referente tecnológico de la región.</p>
+        <p>Creemos que la tecnología no es un lujo — es una herramienta que transforma vidas. Por eso ofrecemos asesoría personalizada, precios justos y garantía real en cada producto.</p>
         <a href="contacto.html" class="btn btn-primario" style="margin-top:8px;">Contáctanos</a>
       </div>
       <div class="mision-valores">
-        <!-- ✏️ Personaliza con los valores de tu proyecto -->
         <div class="valor">
           <h3>🎯 Misión</h3>
-          <p>Describe qué hace tu proyecto o empresa, para quién y cómo lo hace.</p>
+          <p>Ofrecer productos tecnológicos de calidad con asesoría experta, precios competitivos y excelente servicio postventa a todos nuestros clientes.</p>
         </div>
         <div class="valor">
           <h3>🚀 Visión</h3>
-          <p>Describe a dónde quiere llegar tu proyecto en el futuro (5-10 años).</p>
+          <p>Ser la tienda de tecnología más reconocida del Huila en 2030, con presencia en las principales ciudades del departamento.</p>
         </div>
         <div class="valor">
           <h3>💎 Valores</h3>
-          <p>Lista 3-4 valores que guían el trabajo: honestidad, calidad, innovación, compromiso...</p>
+          <p>Honestidad en cada venta · Calidad garantizada · Innovación constante · Compromiso con el cliente · Apoyo a la comunidad local.</p>
         </div>
       </div>
     </section>
@@ -116,7 +119,7 @@
     <div class="footer-contenido">
       <div class="footer-marca">
         <span class="logo-icono">🏪</span>
-        <span class="logo-texto">Mi Proyecto</span>
+        <span class="logo-texto">TechStore Pro</span>
         <p>Tu tienda de tecnología en línea.</p>
       </div>
       <nav class="footer-nav">

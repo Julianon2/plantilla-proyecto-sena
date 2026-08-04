@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+   <!-- BARRA SCROLL — S06: div vacío, el CSS lo posiciona y el JS le da el ancho -->
+<div class="barra-scroll" id="barra-scroll"></div>
 
   <!-- ============================================================
        HEADER — Igual en todas las páginas
@@ -26,7 +28,16 @@
       <a href="productos.html" class="activo">Productos</a>
       <a href="nosotros.html">Nosotros</a>
       <a href="contacto.html">Contacto</a>
+      <a href="registro.html">Registro</a>
     </nav>
+    <div class="header-acciones">
+      <button id="btn-tema" class="btn-tema" aria-label="Cambiar tema">🌙</button>
+      <div class="carrito-badge-contenedor">
+        <span>🛒</span>
+        <span class="carrito-badge" id="carrito-badge">0</span>
+      </div>
+    </div>
+    
   </header>
 
   <main>
@@ -45,125 +56,12 @@
          id="grid-tarjetas" lo usará JavaScript para cargar
          todos los productos desde un array de datos
          -------------------------------------------------------- -->
+
+
     <section class="seccion-tarjetas">
-      <div class="grid-tarjetas" id="grid-tarjetas">
-
-        <article class="tarjeta" data-id="1">
-          <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=250&fit=crop&q=80"
-               alt="MacBook Pro M3" class="tarjeta-img">
-          <div class="tarjeta-info">
-            <h3 class="tarjeta-nombre">MacBook Pro M3</h3>
-            <p class="tarjeta-desc">Chip M3, 16 GB RAM, 512 GB SSD, pantalla Liquid Retina. Para desarrollo y diseño profesional.</p>
-            <div class="tarjeta-pie">
-              <span class="tarjeta-precio">$8.999.000</span>
-              <button class="btn-accion">Ver más</button>
-            </div>
-          </div>
-        </article>
-
-        <article class="tarjeta" data-id="2">
-          <img src="https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=250&fit=crop&q=80"
-               alt="iPhone 15 Pro" class="tarjeta-img">
-          <div class="tarjeta-info">
-            <h3 class="tarjeta-nombre">iPhone 15 Pro</h3>
-            <p class="tarjeta-desc">Chip A17 Pro, titanio, Dynamic Island, cámara 48 MP. El iPhone más avanzado hasta la fecha.</p>
-            <div class="tarjeta-pie">
-              <span class="tarjeta-precio">$4.299.000</span>
-              <button class="btn-accion">Ver más</button>
-            </div>
-          </div>
-        </article>
-
-        <article class="tarjeta" data-id="3">
-          <img src="https://images.unsplash.com/photo-1591488320449-011701bb6704?w=400&h=250&fit=crop&q=80"
-               alt="RTX 4070 Super" class="tarjeta-img">
-          <div class="tarjeta-info">
-            <h3 class="tarjeta-nombre">RTX 4070 Super</h3>
-            <p class="tarjeta-desc">12 GB GDDR6X, DLSS 3, Ray Tracing. Gaming 4K fluido y renderizado profesional.</p>
-            <div class="tarjeta-pie">
-              <span class="tarjeta-precio">$2.399.000</span>
-              <button class="btn-accion">Ver más</button>
-            </div>
-          </div>
-        </article>
-
-        <article class="tarjeta" data-id="4">
-          <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=250&fit=crop&q=80"
-               alt="Dell XPS 15" class="tarjeta-img">
-          <div class="tarjeta-info">
-            <h3 class="tarjeta-nombre">Dell XPS 15</h3>
-            <p class="tarjeta-desc">Intel i7 13va gen, 32 GB RAM, pantalla OLED 4K. El laptop Windows premium por excelencia.</p>
-            <div class="tarjeta-pie">
-              <span class="tarjeta-precio">$6.799.000</span>
-              <button class="btn-accion">Ver más</button>
-            </div>
-          </div>
-        </article>
-
-        <article class="tarjeta" data-id="5">
-          <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=250&fit=crop&q=80"
-               alt="Samsung Galaxy S24" class="tarjeta-img">
-          <div class="tarjeta-info">
-            <h3 class="tarjeta-nombre">Samsung Galaxy S24</h3>
-            <p class="tarjeta-desc">Snapdragon 8 Gen 3, IA Galaxy, cámara 200 MP. El Android más inteligente del mercado.</p>
-            <div class="tarjeta-pie">
-              <span class="tarjeta-precio">$3.199.000</span>
-              <button class="btn-accion">Ver más</button>
-            </div>
-          </div>
-        </article>
-
-        <article class="tarjeta" data-id="6">
-          <img src="https://images.unsplash.com/photo-1555618254-4d2b04e4b00d?w=400&h=250&fit=crop&q=80"
-               alt="Monitor LG UltraWide 34" class="tarjeta-img">
-          <div class="tarjeta-info">
-            <h3 class="tarjeta-nombre">Monitor LG UltraWide 34"</h3>
-            <p class="tarjeta-desc">Panel IPS curvo, 3440×1440, 144 Hz, HDR10. Productividad máxima y gaming inmersivo.</p>
-            <div class="tarjeta-pie">
-              <span class="tarjeta-precio">$1.899.000</span>
-              <button class="btn-accion">Ver más</button>
-            </div>
-          </div>
-        </article>
-
-        <article class="tarjeta" data-id="7">
-          <img src="https://images.unsplash.com/photo-1593640408182-31c228aad585?w=400&h=250&fit=crop&q=80"
-               alt="ASUS ROG Zephyrus G14" class="tarjeta-img">
-          <div class="tarjeta-info">
-            <h3 class="tarjeta-nombre">ASUS ROG Zephyrus G14</h3>
-            <p class="tarjeta-desc">AMD Ryzen 9, RTX 4060, 16 GB RAM, 1 TB SSD. El laptop gamer más compacto y potente.</p>
-            <div class="tarjeta-pie">
-              <span class="tarjeta-precio">$5.499.000</span>
-              <button class="btn-accion">Ver más</button>
-            </div>
-          </div>
-        </article>
-
-        <article class="tarjeta" data-id="8">
-          <img src="https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=400&h=250&fit=crop&q=80"
-               alt="iPad Pro M2" class="tarjeta-img">
-          <div class="tarjeta-info">
-            <h3 class="tarjeta-nombre">iPad Pro M2 11"</h3>
-            <p class="tarjeta-desc">Chip M2, pantalla Liquid Retina, compatible con Apple Pencil y Magic Keyboard. Creación sin límites.</p>
-            <div class="tarjeta-pie">
-              <span class="tarjeta-precio">$3.799.000</span>
-              <button class="btn-accion">Ver más</button>
-            </div>
-          </div>
-        </article>
-
-        <article class="tarjeta" data-id="9">
-          <img src="https://images.unsplash.com/photo-1547394765-185e1e68f34e?w=400&h=250&fit=crop&q=80"
-               alt="Teclado Mecánico Keychron K2" class="tarjeta-img">
-          <div class="tarjeta-info">
-            <h3 class="tarjeta-nombre">Teclado Mecánico Keychron K2</h3>
-            <p class="tarjeta-desc">Switches Gateron Red, retroiluminación RGB, inalámbrico Bluetooth 5.1. El favorito de los programadores.</p>
-            <div class="tarjeta-pie">
-              <span class="tarjeta-precio">$389.000</span>
-              <button class="btn-accion">Ver más</button>
-            </div>
-          </div>
-        </article>
+      <input type="text" id="buscador" placeholder="🔍 Buscar producto..." 
+       style="width:100%;padding:12px 16px;border:2px solid #e2e8f0;border-radius:10px;font-size:16px;margin-bottom:24px;">
+      <div class="grid-tarjetas" id="grid-tarjetas">        
 
       </div><!-- /grid-tarjetas -->
     </section>
@@ -175,7 +73,7 @@
     <div class="footer-contenido">
       <div class="footer-marca">
         <span class="logo-icono">🏪</span>
-        <span class="logo-texto">Mi Proyecto</span>
+        <span class="logo-texto">TechStore Pro</span>
         <p>Tu tienda de tecnología en línea.</p>
       </div>
       <nav class="footer-nav">
@@ -197,7 +95,21 @@
     </div>
   </footer>
 
+   <!-- MODAL PRODUCTO — S06 -->
+<div class="modal-overlay" id="modal-producto">
+  <div class="modal-caja">
+    <button class="modal-cerrar" id="modal-cerrar">×</button>
+    <div class="modal-icono" id="modal-icono">💻</div>
+    <h2 class="modal-titulo" id="modal-titulo">Nombre del producto</h2>
+    <p class="modal-desc" id="modal-desc">Descripción del producto</p>
+    <p class="modal-precio" id="modal-precio">$0</p>
+    <button class="modal-btn-carrito">🛒 Agregar al carrito</button>
+  </div>
+</div>
+
   <script src="js/main.js"></script>
+
+ 
 
 </body>
 </html>

@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "icono": "💻",
+    "nombre": "MacBook Pro M3",
+    "descripcion": "Chip M3, 16 GB RAM, 512 GB SSD, pantalla Liquid Retina.",
+    "precio": "$8.999.000",
+    "imagen": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=250&fit=crop&q=80"
+  },
+  {
+    "id": 2,
+    "icono": "📱",
+    "nombre": "iPhone 15 Pro",
+    "descripcion": "Chip A17 Pro, titanio, Dynamic Island, cámara 48 MP.",
+    "precio": "$4.299.000",
+    "imagen": "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=250&fit=crop&q=80"
+  },
+  {
+    "id": 3,
+    "icono": "🎮",
+    "nombre": "RTX 4070 Super",
+    "descripcion": "12 GB GDDR6X, DLSS 3, Ray Tracing. Gaming 4K fluido.",
+    "precio": "$2.399.000",
+    "imagen": "https://images.unsplash.com/photo-1591488320449-011701bb6704?w=400&h=250&fit=crop&q=80"
+  },
+  {
+    "id": 4,
+    "icono": "💼",
+    "nombre": "Dell XPS 15",
+    "descripcion": "Intel i7 13va gen, 32 GB RAM, pantalla OLED 4K.",
+    "precio": "$6.799.000",
+    "imagen": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=250&fit=crop&q=80"
+  },
+  {
+    "id": 5,
+    "icono": "📲",
+    "nombre": "Samsung Galaxy S24",
+    "descripcion": "Snapdragon 8 Gen 3, IA Galaxy, cámara 200 MP.",
+    "precio": "$3.199.000",
+    "imagen": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=250&fit=crop&q=80"
+  },
+  {
+    "id": 6,
+    "icono": "🖥️",
+    "nombre": "Monitor LG UltraWide 34\"",
+    "descripcion": "Panel IPS curvo, 3440×1440, 144 Hz, HDR10.",
+    "precio": "$1.899.000",
+    "imagen": "https://images.unsplash.com/photo-1586210579191-33b45e38fa2c?w=400&h=250&fit=crop&q=80"
+  }
+]
