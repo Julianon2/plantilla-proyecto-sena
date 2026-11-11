@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Producto | TechStore Pro</title>
+  <!-- Los estilos de .producto-detalle, .producto-nombre, etc. están en styles.css -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- BARRA SCROLL -->
+  <div class="barra-scroll" id="barra-scroll"></div>
+
+  <!-- HEADER — igual en todas las páginas -->
+  <header class="header">
+    <div class="header-logo">
+      <span class="logo-icono">💻</span>
+      <span class="logo-texto">TechStore Pro</span>
+    </div>
+    <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="nav-menu" class="nav-menu">
+      <a href="index.html">Inicio</a>
+      <a href="productos.html">Productos</a>
+      <a href="nosotros.html">Nosotros</a>
+      <a href="contacto.html">Contacto</a>
+      <a href="registro.html">Registro</a>
+    </nav>
+    <div class="header-acciones">
+  <a href="login.html" id="nav-login" class="btn-login-header">Login</a>
+  <button id="btn-tema" class="btn-tema" aria-label="Cambiar tema">🌙</button>
+  <div class="carrito-badge-contenedor">
+    <span>🛒</span>
+    <span class="carrito-badge" id="carrito-badge">0</span>
+  </div>
+</div>
+  </header>
+
+  <main>
+
+    <!-- Estado: cargando — visible hasta que producto.js llene los datos -->
+    <div id="estado-cargando" class="producto-cargando">
+      <p>⏳ Cargando producto...</p>
+    </div>
+
+    <!-- Estado: error — se muestra si el id no existe o falla el fetch -->
+    <div id="estado-error" class="producto-error" style="display:none;">
+      <p>❌ No se pudo cargar el producto.</p>
+      <a href="productos.html" class="btn btn-primario" style="margin-top:16px;">← Ver todos los productos</a>
+    </div>
+
+    <!-- Contenido del producto — oculto hasta que producto.js lo llene -->
+    <div id="producto-detalle" class="producto-detalle" style="display:none;">
+
+      <!-- IMAGEN (producto.js la inserta aquí) -->
+      <div class="producto-imagen-wrap" id="producto-imagen-wrap"></div>
+
+      <!-- INFORMACIÓN -->
+      <div class="producto-info">
+        <a href="productos.html" class="btn-volver">← Volver a productos</a>
+        <br><br>
+        <h1 class="producto-nombre" id="producto-nombre"></h1>
+        <div class="producto-precio" id="producto-precio"></div>
+        <p class="producto-descripcion" id="producto-descripcion"></p>
+        <div class="producto-acciones">
+          <button class="btn btn-primario" id="btn-agregar-carrito">🛒 Agregar al carrito</button>
+        </div>
+        <!-- Mensaje de confirmación al agregar al carrito -->
+        <div id="producto-mensaje" style="margin-top:16px; display:none;"></div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-contenido">
+      <div class="footer-marca">
+        <span class="logo-icono">🏪</span>
+        <span class="logo-texto">TechStore Pro</span>
+        <p>Tu tienda de tecnología en línea.</p>
+      </div>
+      <nav class="footer-nav">
+        <h4>Páginas</h4>
+        <a href="index.html">Inicio</a>
+        <a href="productos.html">Productos</a>
+        <a href="nosotros.html">Nosotros</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+      <div class="footer-contacto">
+        <h4>Contacto</h4>
+        <p>📍 Ciudad, Departamento</p>
+        <p>📞 300 000 0000</p>
+        <p>✉️ info@techstorepro.co</p>
+      </div>
+    </div>
+    <div class="footer-copy">
+      <p>&copy; 2026 TechStore Pro — Todos los derechos reservados</p>
+    </div>
+  </footer>
+
+  <!-- main.js: menú hamburguesa, tema oscuro, carrito, actualizarNavSesion -->
+  <script src="js/main.js"></script>
+  <!-- producto.js: lógica exclusiva de esta página -->
+  <script src="js/producto.js"></script>
+
+</body>
+</html>

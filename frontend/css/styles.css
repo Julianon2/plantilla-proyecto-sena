@@ -138,6 +138,19 @@ a:hover { color: var(--color-secundario); }
   background: var(--color-primario);
 }
 
+/* Botón Login en el header — derecha */
+.btn-login-header {
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+  background: var(--color-primario);
+  padding: 7px 18px;
+  border-radius: 8px;
+  transition: opacity .2s;
+  white-space: nowrap;
+}
+.btn-login-header:hover { opacity: .85; }
+
 /* Botón hamburguesa — visible solo en móvil */
 .menu-toggle {
   display: none;       /* Se muestra en el media query de abajo */
@@ -758,6 +771,7 @@ a:hover { color: var(--color-secundario); }
     position: absolute;
     top: var(--alto-header);
     left: 0; right: 0;
+    transform: none;
     background: var(--color-oscuro);
     flex-direction: column;
     padding: 16px;
@@ -988,6 +1002,42 @@ body.tema-oscuro .modal-caja  { background: #1e293b; color: #f1f5f9; }
 body.tema-oscuro .modal-titulo { color: #f1f5f9; }
 body.tema-oscuro .modal-desc   { color: #94a3b8; }
 
+/* ── Formularios en tema oscuro (registro.html, contacto.html, login.html) ── */
+body.tema-oscuro .form-contacto {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.tema-oscuro .campo label { color: #e2e8f0; }
+
+body.tema-oscuro .campo input,
+body.tema-oscuro .campo textarea,
+body.tema-oscuro .campo select {
+  background: #0f172a;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+body.tema-oscuro .campo input:focus,
+body.tema-oscuro .campo textarea:focus,
+body.tema-oscuro .campo select:focus {
+  background: #1e293b;
+  border-color: var(--color-primario);
+}
+
+body.tema-oscuro .campo input::placeholder,
+body.tema-oscuro .campo textarea::placeholder { color: #475569; }
+
+/* page-header en tema oscuro — ya es oscuro por defecto, solo ajustar breadcrumb */
+body.tema-oscuro .breadcrumb a { color: rgba(255,255,255,0.5); }
+
+/* Carrito items en tema oscuro */
+body.tema-oscuro .carrito-item {
+  background: #1e293b;
+  border-color: #334155;
+}
+body.tema-oscuro .carrito-item-nombre { color: #f1f5f9; }
+
 .header-acciones {
   display: flex;
   align-items: center;
@@ -1045,6 +1095,13 @@ body.tema-oscuro .modal-desc   { color: #94a3b8; }
 }
 
 .carrito-item-icono { font-size: 32px; }
+.carrito-item-img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
 .carrito-item-info  { flex: 1; }
 .carrito-item-nombre { font-weight: 700; color: var(--color-oscuro); }
 .carrito-item-precio { color: var(--color-primario); font-weight: 700; }
@@ -1074,3 +1131,533 @@ body.tema-oscuro .modal-desc   { color: #94a3b8; }
   align-items: center;
   gap: 16px;
 }
+
+/* ══════════════════════════════════════════════
+   S17d: PÁGINA DE PRODUCTO INDIVIDUAL
+   Aplica solo en producto.html
+   ══════════════════════════════════════════════ */
+
+/* Contenedor principal — imagen a la izquierda, info a la derecha */
+.producto-detalle {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 24px;
+  display: flex;       /* lado a lado en desktop */
+  gap: 48px;
+  flex-wrap: wrap;     /* apilados en mobile */
+  align-items: flex-start;
+}
+
+/* Lado izquierdo — imagen del producto */
+.producto-imagen-wrap {
+  flex: 1 1 300px;     /* crece, pero mínimo 300px */
+  max-width: 400px;
+}
+
+/* La imagen ocupa todo el ancho de su contenedor */
+.producto-imagen-wrap img {
+  width: 100%;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  object-fit: cover;
+}
+
+/* Si no hay imagen, mostrar el emoji centrado en un cuadrado */
+.producto-imagen-placeholder {
+  width: 100%;
+  aspect-ratio: 1;            /* cuadrado perfecto */
+  background: #f3f4f6;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+}
+
+/* Lado derecho — información del producto */
+.producto-info {
+  flex: 1 1 280px;
+}
+
+/* Nombre grande del producto */
+.producto-nombre {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+/* Precio destacado en azul */
+.producto-precio {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #2563eb;
+  margin-bottom: 20px;
+}
+
+/* Descripción con buena legibilidad */
+.producto-descripcion {
+  color: #4b5563;
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+
+/* Fila de botones de acción */
+.producto-acciones {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Estados de carga y error — centrados en la página */
+.producto-cargando,
+.producto-error {
+  max-width: 600px;
+  margin: 80px auto;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.producto-error p {
+  color: #dc2626;
+  font-size: 1.1rem;
+}
+
+/* Botón "← Volver a productos" con borde */
+.btn-volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border: 2px solid #d1d5db;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #374151;
+  font-weight: 600;
+  transition: border-color 0.2s;
+}
+
+.btn-volver:hover { border-color: #6b7280; }
+
+/* ── Modo oscuro ── */
+.tema-oscuro .producto-imagen-placeholder { background: #1f2937; }
+.tema-oscuro .producto-descripcion        { color: #9ca3af; }
+.tema-oscuro .btn-volver                  { color: #d1d5db; border-color: #374151; }
+.tema-oscuro .btn-volver:hover            { border-color: #6b7280; }
+
+/* ══════════════════════════════════════════════
+   S17d: PÁGINA MIS PEDIDOS
+   Aplica solo en mispedidos.html
+   ══════════════════════════════════════════════ */
+
+/* Contenedor principal centrado */
+.pedidos-contenedor {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 24px;
+}
+
+.pedidos-titulo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.pedidos-subtitulo {
+  color: #6b7280;
+  margin-bottom: 32px;
+}
+
+/* Cada pedido es una tarjeta con borde */
+.pedido-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  background: #fff;
+}
+
+/* Encabezado: id + fecha a la izquierda, badge a la derecha */
+.pedido-encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+/* ID del pedido en fuente monospace y gris claro */
+.pedido-id {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  font-family: monospace;
+}
+
+.pedido-fecha {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+/* Badge de estado con colores semánticos */
+.badge-estado {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;        /* píldora redondeada */
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-estado.pendiente  { background: #fef9c3; color: #854d0e; }
+.badge-estado.procesando { background: #ede9fe; color: #5b21b6; }
+.badge-estado.enviado    { background: #dbeafe; color: #1e40af; }
+.badge-estado.entregado  { background: #dcfce7; color: #166534; }
+.badge-estado.cancelado  { background: #fee2e2; color: #991b1b; }
+
+/* Selector de estado editable — usado en admin.html */
+.selector-estado {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #374151;
+  cursor: pointer;
+}
+
+/* Línea de tiempo del pedido — usada en mispedidos.js y admin.js (js/timeline.js) */
+.timeline-pedido {
+  display: flex;
+  align-items: center;
+  margin: 16px 0;
+  padding-top: 12px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.timeline-paso {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.timeline-punto {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  background: #f3f4f6;
+  border: 2px solid #e5e7eb;
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+
+.timeline-texto {
+  font-size: 0.7rem;
+  color: #9ca3af;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.timeline-linea {
+  flex: 1;
+  height: 2px;
+  background: #e5e7eb;
+  margin: 0 4px;
+  margin-bottom: 22px; /* alinea con el centro del punto, no con el texto */
+}
+
+.timeline-paso.completado .timeline-punto,
+.timeline-paso.activo .timeline-punto {
+  filter: none;
+  opacity: 1;
+  background: #dcfce7;
+  border-color: #166534;
+}
+
+.timeline-paso.completado .timeline-texto,
+.timeline-paso.activo .timeline-texto {
+  color: #166534;
+}
+
+.timeline-paso.activo .timeline-punto {
+  background: #39a900;
+  border-color: #2d8400;
+  box-shadow: 0 0 0 4px rgba(57,169,0,0.15);
+}
+
+.timeline-paso.activo .timeline-texto {
+  color: #2d8400;
+  font-weight: 800;
+}
+
+@media (max-width: 480px) {
+  .timeline-texto { font-size: 0.62rem; }
+  .timeline-punto { width: 26px; height: 26px; font-size: 0.75rem; }
+}
+
+/* Lista de productos dentro del pedido */
+.pedido-productos {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px 0;
+  border-top: 1px solid #f3f4f6;
+  padding-top: 12px;
+}
+
+.pedido-productos li {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+/* Total alineado a la derecha */
+.pedido-total {
+  text-align: right;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #111827;
+}
+
+/* Estado vacío — cuando el usuario no tiene pedidos */
+.pedidos-vacio {
+  text-align: center;
+  padding: 60px 0;
+  color: #9ca3af;
+}
+
+.pedidos-vacio p { font-size: 1.1rem; margin-bottom: 16px; }
+
+/* ── Modo oscuro ── */
+.tema-oscuro .pedido-card            { background: #1f2937; border-color: #374151; }
+.tema-oscuro .pedido-productos       { border-color: #374151; }
+.tema-oscuro .pedido-productos li    { color: #9ca3af; }
+.tema-oscuro .pedido-total           { color: #f9fafb; }
+.tema-oscuro .pedido-fecha,
+.tema-oscuro .pedidos-subtitulo      { color: #6b7280; }
+.tema-oscuro .badge-estado.pendiente  { background: #422006; color: #fde68a; }
+.tema-oscuro .badge-estado.procesando { background: #2e1065; color: #c4b5fd; }
+.tema-oscuro .badge-estado.enviado    { background: #1e3a5f; color: #93c5fd; }
+.tema-oscuro .badge-estado.entregado  { background: #14432a; color: #86efac; }
+.tema-oscuro .badge-estado.cancelado  { background: #450a0a; color: #fca5a5; }
+.tema-oscuro .selector-estado         { background: #1f2937; border-color: #374151; color: #e5e7eb; }
+.tema-oscuro .timeline-pedido         { border-color: #374151; }
+.tema-oscuro .timeline-punto          { background: #374151; border-color: #4b5563; }
+.tema-oscuro .timeline-texto          { color: #6b7280; }
+.tema-oscuro .timeline-linea          { background: #374151; }
+.tema-oscuro .timeline-paso.completado .timeline-punto,
+.tema-oscuro .timeline-paso.activo .timeline-punto    { background: #14432a; border-color: #22c55e; }
+.tema-oscuro .timeline-paso.completado .timeline-texto,
+.tema-oscuro .timeline-paso.activo .timeline-texto    { color: #86efac; }
+.tema-oscuro .timeline-paso.activo .timeline-punto    { background: #39a900; border-color: #86efac; }
+
+/* ══════════════════════════════════════════════
+   S17d: DROPDOWN DE USUARIO EN EL HEADER
+   Aparece al hacer clic en el nombre del usuario logueado
+   ══════════════════════════════════════════════ */
+
+/* Contenedor relativo para posicionar el dropdown */
+.usuario-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Botón que muestra el nombre del usuario */
+.usuario-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: var(--color-primario);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: inherit;
+  transition: opacity .2s;
+}
+.usuario-btn:hover { opacity: .85; }
+
+/* Flecha que indica que hay un menú */
+.usuario-btn::after {
+  content: '▾';
+  font-size: 11px;
+  margin-left: 2px;
+}
+
+/* Menú desplegable — oculto por defecto */
+.usuario-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  min-width: 180px;
+  overflow: hidden;
+  z-index: 100;
+}
+
+/* Mostrar el menú cuando tiene la clase .abierto */
+.usuario-menu.abierto { display: block; }
+
+/* Cada opción del menú */
+.usuario-menu a,
+.usuario-menu button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #374151;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: background .15s;
+}
+.usuario-menu a:hover,
+.usuario-menu button:hover { background: #f9fafb; }
+
+/* Separador antes de "Cerrar sesión" */
+.usuario-menu .menu-separador {
+  height: 1px;
+  background: #f3f4f6;
+  margin: 4px 0;
+}
+
+/* "Cerrar sesión" en rojo */
+.usuario-menu .btn-cerrar-sesion { color: #dc2626; }
+.usuario-menu .btn-cerrar-sesion:hover { background: #fee2e2; }
+
+/* ── Modo oscuro ── */
+.tema-oscuro .usuario-menu            { background: #1f2937; border-color: #374151; }
+.tema-oscuro .usuario-menu a,
+.tema-oscuro .usuario-menu button     { color: #e5e7eb; }
+.tema-oscuro .usuario-menu a:hover,
+.tema-oscuro .usuario-menu button:hover { background: #374151; }
+.tema-oscuro .menu-separador          { background: #374151; }
+.tema-oscuro .btn-cerrar-sesion       { color: #f87171; }
+.tema-oscuro .btn-cerrar-sesion:hover { background: #450a0a; }
+
+/* ══════════════════════════════════════════════
+   S17d: PERFIL DE USUARIO (perfil.html)
+   ══════════════════════════════════════════════ */
+
+.perfil-contenedor {
+  max-width: 520px;
+  margin: 60px auto;
+  padding: 40px 32px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+/* Círculo con la inicial del nombre */
+.perfil-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--color-primario);
+  color: white;
+  font-size: 2rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.perfil-nombre {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 8px;
+}
+
+/* Badge que muestra el rol (admin / cliente) */
+.perfil-rol {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #ede9fe;
+  color: #6d28d9;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 28px;
+}
+
+/* Lista de campos email / departamento / municipio */
+.perfil-info {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.perfil-campo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #f9fafb;
+  border-radius: 10px;
+  gap: 12px;
+}
+
+.perfil-etiqueta {
+  font-size: 0.85rem;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.perfil-valor {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111827;
+  text-align: right;
+  word-break: break-all;
+}
+
+.perfil-acciones {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Estados de carga y error */
+.perfil-cargando,
+.perfil-error {
+  text-align: center;
+  padding: 80px 24px;
+  color: #6b7280;
+}
+
+/* ── Modo oscuro ── */
+.tema-oscuro .perfil-contenedor { background: #1f2937; box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
+.tema-oscuro .perfil-nombre     { color: #f9fafb; }
+.tema-oscuro .perfil-rol        { background: #4c1d95; color: #ddd6fe; }
+.tema-oscuro .perfil-campo      { background: #111827; }
+.tema-oscuro .perfil-etiqueta   { color: #9ca3af; }
+.tema-oscuro .perfil-valor      { color: #f9fafb; }

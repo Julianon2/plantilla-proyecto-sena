@@ -141,11 +141,12 @@ if (formulario) {  // solo corre en contacto.html donde existe el formulario
 function crearTarjeta(producto) {
   return `
     <article class="tarjeta"
-      data-id="${producto.id}"
+      data-id="${producto._id || producto.id || ''}"
       data-icono="${producto.icono || '📦'}"
       data-nombre="${producto.nombre}"
       data-desc="${producto.descripcion}"
-      data-precio="${producto.precio}">
+      data-precio="${producto.precio}"
+      data-imagen="${producto.imagen || ''}">
       <span class="badge-disponible">✓ Disponible</span>
       <img src="${producto.imagen}" alt="${producto.nombre}" class="tarjeta-img">
       <div class="tarjeta-info">
@@ -153,7 +154,7 @@ function crearTarjeta(producto) {
         <p class="tarjeta-desc">${producto.descripcion}</p>
         <div class="tarjeta-pie">
           <span class="tarjeta-precio">${producto.precio}</span>
-          <button class="btn-accion">Ver más</button>
+          <a href="producto.html?id=${producto._id || producto.id || ''}" class="btn-accion">Ver más</a>
         </div>
       </div>
     </article>
@@ -173,7 +174,7 @@ async function cargarProductos() {
   try {
     // PASO 1 — Pedir el archivo JSON al servidor
     // await pausa aquí hasta que llegue la respuesta (el sobre)
-    const respuesta = await fetch('data/productos.json');
+    const respuesta = await fetch('http://localhost:3000/api/productos');
 
     // PASO 2 — Leer el contenido del JSON como array JavaScript
     // .json() también es asíncrono → necesita su propio await
@@ -221,6 +222,9 @@ if (modal) {
     document.querySelector('#modal-titulo').textContent = tarjeta.dataset.nombre || 'Producto';
     document.querySelector('#modal-desc').textContent   = tarjeta.dataset.desc   || '';
     document.querySelector('#modal-precio').textContent = tarjeta.dataset.precio || '';
+    // Guardar imagen e id en el modal para usarlos al agregar al carrito
+    modal.dataset.imagen = tarjeta.dataset.imagen || '';
+    modal.dataset.id     = tarjeta.dataset.id     || '';
     modal.classList.add('visible');
   }
 
@@ -368,18 +372,17 @@ function agregarAlCarrito(producto) {
 const btnModalCarrito = document.querySelector('.modal-btn-carrito');
 if (btnModalCarrito) {
   btnModalCarrito.addEventListener('click', function() {
-    // Leer los datos del producto desde el modal
+    const modalEl = document.getElementById('modal-producto');
     const producto = {
+      id:     modalEl.dataset.id     || '',
       nombre: document.getElementById('modal-titulo').textContent,
       precio: document.getElementById('modal-precio').textContent,
-      icono: document.getElementById('modal-icono').textContent,
+      icono:  document.getElementById('modal-icono').textContent,
+      imagen: modalEl.dataset.imagen || '',
       fecha:  new Date().toLocaleDateString('es-CO')
     };
-    
     agregarAlCarrito(producto);
-    
-    // Cerrar el modal
-    document.getElementById('modal-producto').classList.remove('visible');
+    modalEl.classList.remove('visible');
   });
 }
 
@@ -418,8 +421,14 @@ function mostrarPaginaCarrito() {
   carrito.forEach(function(producto, indice) {
     const item = document.createElement('div');
     item.classList.add('carrito-item');
+
+    // Si el producto tiene imagen, mostrarla. Si no, mostrar el emoji.
+    const imagenHTML = producto.imagen
+      ? `<img src="${producto.imagen}" alt="${producto.nombre}" class="carrito-item-img">`
+      : `<span class="carrito-item-icono">${producto.icono}</span>`;
+
     item.innerHTML = `
-      <span class="carrito-item-icono">${producto.icono}</span>
+      ${imagenHTML}
       <div class="carrito-item-info">
         <div class="carrito-item-nombre">${producto.nombre}</div>
         <div class="carrito-item-precio">${producto.precio}</div>
@@ -455,3 +464,281 @@ if (btnVaciar) {
 }
 
 mostrarPaginaCarrito(); // llamar al cargar
+
+// ===== S17d: ESTADO DE SESIÓN EN EL NAV — MENÚ DESPLEGABLE =====
+// Si hay sesión activa: reemplaza el botón Login por un dropdown con
+//   👤 Mi perfil | 📦 Mis pedidos | 🚪 Cerrar sesión
+// Si no hay sesión: muestra el enlace Login normal
+
+function actualizarNavSesion() {
+  const token  = localStorage.getItem('token');
+  const nombre = localStorage.getItem('usuario-nombre');
+  const rol    = localStorage.getItem('usuario-rol');
+  const enlaceLogin = document.querySelector('#nav-login');
+
+  if (!enlaceLogin) return;
+
+  if (token && nombre) {
+    // ── 1. Construir el contenedor del dropdown ──────────────────────────
+    // Wrap: div.usuario-dropdown — posición relativa para que el menú quede abajo
+    const wrapper = document.createElement('div');
+    wrapper.className = 'usuario-dropdown';
+
+    // Botón que muestra el nombre; al hacer clic abre/cierra el menú
+    const btn = document.createElement('button');
+    btn.className   = 'usuario-btn';
+    btn.textContent = '👤 ' + nombre;
+    btn.setAttribute('aria-haspopup', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+
+    // Menú oculto con las tres opciones
+    const menu = document.createElement('div');
+    menu.className = 'usuario-menu';
+    menu.id        = 'usuario-menu';
+
+    // Opción: Mi perfil
+    const linkPerfil = document.createElement('a');
+    linkPerfil.href        = 'perfil.html';
+    linkPerfil.textContent = '👤 Mi perfil';
+
+    // Opción: Mis pedidos
+    const linkPedidos = document.createElement('a');
+    linkPedidos.href        = 'mispedidos.html';
+    linkPedidos.textContent = '📦 Mis pedidos';
+
+    // Opción: Panel Admin — solo visible si el usuario tiene rol 'admin'
+    const linkAdmin = document.createElement('a');
+    linkAdmin.href        = 'admin.html';
+    linkAdmin.textContent = '🛠️ Panel Admin';
+
+    // Separador visual antes de "Cerrar sesión"
+    const separador = document.createElement('div');
+    separador.className = 'menu-separador';
+
+    // Opción: Cerrar sesión — usa <button> para que no navegue solo
+    const btnCerrar = document.createElement('button');
+    btnCerrar.className   = 'btn-cerrar-sesion';
+    btnCerrar.textContent = '🚪 Cerrar sesión';
+    btnCerrar.addEventListener('click', function() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('usuario-nombre');
+      localStorage.removeItem('usuario-rol');
+      window.location.href = 'login.html'; // redirige al login
+    });
+
+    // Ensamblar el menú
+    menu.appendChild(linkPerfil);
+    menu.appendChild(linkPedidos);
+    if (rol === 'admin') menu.appendChild(linkAdmin);
+    menu.appendChild(separador);
+    menu.appendChild(btnCerrar);
+
+    // Ensamblar el wrapper
+    wrapper.appendChild(btn);
+    wrapper.appendChild(menu);
+
+    // ── 2. Ocultar el enlace "Registro" — no tiene sentido estando logueado ──
+    const navMenu = document.querySelector('#nav-menu');
+    if (navMenu) {
+      navMenu.querySelectorAll('a').forEach(function(a) {
+        if (a.href.includes('registro.html')) a.style.display = 'none';
+      });
+    }
+
+    // ── 3. Reemplazar el <a id="nav-login"> por el nuevo dropdown ────────
+    enlaceLogin.parentNode.replaceChild(wrapper, enlaceLogin);
+
+    // ── 4. Lógica de abrir / cerrar al hacer clic en el botón ───────────
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation(); // evitar que el clic llegue al document
+      const abierto = menu.classList.toggle('abierto');
+      btn.setAttribute('aria-expanded', abierto); // accesibilidad
+    });
+
+    // Cerrar el menú si el usuario hace clic fuera del dropdown
+    document.addEventListener('click', function cerrarMenuFuera(e) {
+      if (!wrapper.contains(e.target)) {
+        menu.classList.remove('abierto');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+  } else {
+    // El usuario NO está logueado — mostrar el enlace Login normal
+    enlaceLogin.textContent = 'Login';
+    enlaceLogin.href = 'login.html';
+  }
+}
+
+actualizarNavSesion(); // ejecutar al cargar cada página
+
+// ===== S18A: CHECKOUT — PAGAR CON WOMPI =====
+// Ya no se crea la orden directamente. Se pide una firma al backend,
+// se abre el Widget de Wompi, y la orden se crea solo si el pago es aprobado
+// (el backend lo confirma vía polling, ver /api/pagos/estado/:reference).
+
+const btnConfirmar = document.getElementById('btn-confirmar');
+let pollingInterval = null;
+
+if (btnConfirmar) {
+  btnConfirmar.addEventListener('click', async function() {
+    const token   = localStorage.getItem('token');
+    const carrito = leerCarrito();
+    const mensaje = document.getElementById('checkout-mensaje');
+
+    // 1. Verificar que el usuario está logueado
+    if (!token) {
+      mensaje.innerHTML =
+        '<div style="background:#fef9c3; border:1px solid #fde047; border-radius:10px; padding:16px;">' +
+          '<p style="color:#854d0e; font-weight:600;">⚠️ Debes iniciar sesión para confirmar tu pedido.</p>' +
+          '<a href="login.html" style="color:#92400e;">Ir al login →</a>' +
+        '</div>';
+      mensaje.style.display = 'block';
+      return;
+    }
+
+    // 2. Verificar que el carrito no está vacío
+    if (carrito.length === 0) {
+      mensaje.innerHTML =
+        '<div style="background:#fef9c3; border:1px solid #fde047; border-radius:10px; padding:16px;">' +
+          '<p style="color:#854d0e; font-weight:600;">⚠️ El carrito está vacío.</p>' +
+        '</div>';
+      mensaje.style.display = 'block';
+      return;
+    }
+
+    // 3. Construir el array de productos para el backend
+    // El backend espera: { productos: [{ producto: id, cantidad: 1 }], total: número }
+    const productosParaEnviar = carrito.map(function(item) {
+      return { producto: item.id, cantidad: 1 };
+    });
+
+    // Calcular el total — el precio viene como string "$1.299.000".
+    // Los puntos son separadores de miles (formato colombiano), no decimales — hay que quitarlos.
+    const total = carrito.reduce(function(acumulado, item) {
+      const numero = parseFloat(item.precio.replace(/[^0-9]/g, '')) || 0;
+      return acumulado + numero;
+    }, 0);
+
+    try {
+      btnConfirmar.disabled    = true;
+      btnConfirmar.textContent = 'Preparando pago...';
+
+      // 4. Pedir al backend la firma de integridad (crea la Transaccion en estado PENDING)
+      const respuesta = await fetch('http://localhost:3000/api/pagos/firma', {
+        method:  'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({
+          productos: productosParaEnviar,
+          total:     total
+        })
+      });
+
+      const datos = await respuesta.json();
+
+      // 5. Si el backend respondió con error
+      if (!respuesta.ok) {
+        mensaje.innerHTML =
+          '<div style="background:#fee2e2; border:1px solid #fca5a5; border-radius:10px; padding:16px;">' +
+            '<p style="color:#991b1b; font-weight:600;">❌ ' + (datos.error || 'Error al preparar el pago') + '</p>' +
+          '</div>';
+        mensaje.style.display = 'block';
+        btnConfirmar.disabled    = false;
+        btnConfirmar.textContent = '💳 Pagar con Wompi';
+        return;
+      }
+
+      // 6. Abrir el Widget de Wompi con los datos de la firma
+      const checkout = new WidgetCheckout({
+        currency:     datos.currency,
+        amountInCents: datos.amountInCents,
+        reference:    datos.reference,
+        publicKey:    datos.publicKey,
+        signature:    { integrity: datos.signature }
+      });
+
+      checkout.open(function() {
+        // Este callback se ejecuta cuando el widget se cierra (pago terminado o cancelado)
+        iniciarPolling(datos.reference, token, mensaje);
+      });
+
+    } catch (error) {
+      // 7. Error de red
+      mensaje.innerHTML =
+        '<div style="background:#fee2e2; border:1px solid #fca5a5; border-radius:10px; padding:16px;">' +
+          '<p style="color:#991b1b; font-weight:600;">❌ No se pudo conectar. Verifica que el servidor esté corriendo.</p>' +
+        '</div>';
+      mensaje.style.display = 'block';
+      btnConfirmar.disabled    = false;
+      btnConfirmar.textContent = '💳 Pagar con Wompi';
+    }
+  });
+}
+
+// Consulta cada 3 segundos si el pago ya fue aprobado por Wompi.
+// Máximo 20 intentos (60 segundos) antes de mostrar timeout.
+function iniciarPolling(reference, token, mensaje) {
+  btnConfirmar.textContent = 'Confirmando pago...';
+  let intentos = 0;
+
+  pollingInterval = setInterval(async function() {
+    intentos++;
+    if (intentos > 20) {
+      clearInterval(pollingInterval);
+      mostrarResultadoPago('TIMEOUT', mensaje);
+      return;
+    }
+
+    try {
+      const r = await fetch('http://localhost:3000/api/pagos/estado/' + reference, {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      const data = await r.json();
+
+      if (data.status !== 'PENDING') {
+        clearInterval(pollingInterval);
+        mostrarResultadoPago(data.status, mensaje);
+      }
+    } catch (e) {
+      console.error('Polling error', e);
+    }
+  }, 3000);
+}
+
+function mostrarResultadoPago(status, mensaje) {
+  if (status === 'APPROVED') {
+    localStorage.removeItem('carrito');
+    actualizarBadge();
+
+    mensaje.innerHTML =
+      '<div style="background:#dcfce7; border:1px solid #bbf7d0; border-radius:10px; padding:20px;">' +
+        '<p style="color:#15803d; font-weight:700; font-size:16px;">✅ ¡Pago aprobado!</p>' +
+        '<p style="color:#166534; font-size:13px; margin-top:6px;">Tu orden fue registrada en el sistema.</p>' +
+        '<a href="index.html" style="color:#15803d; font-weight:600;">← Volver al inicio</a>' +
+      '</div>';
+    mensaje.style.display = 'block';
+
+    mostrarPaginaCarrito(); // actualizar la vista del carrito (ahora vacío)
+
+  } else if (status === 'DECLINED') {
+    mensaje.innerHTML =
+      '<div style="background:#fee2e2; border:1px solid #fca5a5; border-radius:10px; padding:16px;">' +
+        '<p style="color:#991b1b; font-weight:600;">❌ Pago rechazado. Intenta con otra tarjeta.</p>' +
+      '</div>';
+    mensaje.style.display = 'block';
+    btnConfirmar.disabled    = false;
+    btnConfirmar.textContent = '💳 Pagar con Wompi';
+
+  } else {
+    mensaje.innerHTML =
+      '<div style="background:#fef9c3; border:1px solid #fde047; border-radius:10px; padding:16px;">' +
+        '<p style="color:#854d0e; font-weight:600;">⏱️ No pudimos confirmar el pago todavía. Revisa "Mis pedidos" en un momento.</p>' +
+      '</div>';
+    mensaje.style.display = 'block';
+    btnConfirmar.disabled    = false;
+    btnConfirmar.textContent = '💳 Pagar con Wompi';
+  }
+}

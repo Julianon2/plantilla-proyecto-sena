@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro — TechStore Pro</title>
+  <title>Registro | TechStore Pro</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-   <!-- BARRA SCROLL — S06: div vacío, el CSS lo posiciona y el JS le da el ancho -->
-<div class="barra-scroll" id="barra-scroll"></div>
+
+  <!-- BARRA SCROLL — S06: div vacío, el CSS lo posiciona y el JS le da el ancho -->
+  <div class="barra-scroll" id="barra-scroll"></div>
 
   <!-- HEADER — Igual en todas las páginas -->
   <header class="header">
@@ -26,67 +27,83 @@
       <a href="contacto.html">Contacto</a>
       <a href="registro.html" class="activo">Registro</a>
     </nav>
-    <button id="btn-tema" class="btn-tema" aria-label="Cambiar tema">🌙</button>
+    <div class="header-acciones">
+      <a href="login.html" id="nav-login" class="btn-login-header">Login</a>
+      <button id="btn-tema" class="btn-tema" aria-label="Cambiar tema">🌙</button>
+    </div>
   </header>
 
   <main>
-<section class="seccion-formulario" style="max-width:600px;margin:60px auto;padding:0 24px;">
-  <h1 style="margin-bottom:32px;">Crear cuenta</h1>
 
-  <form id="form-registro" novalidate>
-
-    <!-- CAMPO NOMBRE — completo para que veas el patrón -->
-    <div class="campo">
-      <label for="reg-nombre">Nombre completo</label>
-      <input type="text" id="reg-nombre" placeholder="Tu nombre">
-      <span class="error" id="error-reg-nombre"></span>
+    <div class="page-header">
+      <p class="breadcrumb"><a href="index.html">Inicio</a> / Registro</p>
+      <h1>Crear cuenta</h1>
+      <p>Regístrate para acceder a tu historial de pedidos.</p>
     </div>
 
-    <!-- ✏️ CAMPO EMAIL — construye tú siguiendo el mismo patrón -->
-    <!-- id del input: reg-email | id del error: error-reg-email -->
-    <!-- type: email | placeholder: correo@ejemplo.com -->
+    <section style="max-width:600px; margin:60px auto; padding:0 32px;">
 
-    <div class="campo">
-      <label for="reg-nombre">Correo electrónico</label>
-      <input type="text" id="reg-email" placeholder="correo@ejemplo.com">
-      <span class="error" id="error-reg-email"></span>
-    </div>
+      <form id="form-registro" class="form-contacto" novalidate>
 
-    <!-- CAMPO DEPARTAMENTO — completo: es un select, no un input -->
-    <div class="campo">
-      <label for="reg-departamento">Departamento</label>
-      <!-- JavaScript llenará este select con los 33 departamentos -->
-      <select id="reg-departamento">
-        <option value="">Cargando departamentos...</option>
-      </select>
-      <span class="error" id="error-reg-departamento"></span>
-    </div>
+        <!-- CAMPO NOMBRE -->
+        <div class="campo">
+          <label for="reg-nombre">Nombre completo</label>
+          <input type="text" id="reg-nombre"
+                 placeholder="Tu nombre completo"
+                 autocomplete="name">
+          <span class="error" id="error-reg-nombre"></span>
+        </div>
 
-    <!-- ✏️ CAMPO MUNICIPIO — construye tú siguiendo el patrón del departamento -->
-    <!-- id del select: reg-municipio | id del error: error-reg-municipio -->
-    <!-- El select empieza disabled con texto: "Primero elige un departamento" -->
-    <div class="campo">
-      <label for="reg-municipio">Municipio</label>
-      <!-- JavaScript llenará este select con los 33 departamentos -->
-      <select id="reg-municipio">
-        <option value="">Primero elige un departamento</option>
-      </select>
-      <span class="error" id="error-reg-municipio"></span>
-    </div>
+        <!-- CAMPO EMAIL -->
+        <div class="campo">
+          <label for="reg-email">Correo electrónico</label>
+          <input type="email" id="reg-email"
+                 placeholder="correo@ejemplo.com"
+                 autocomplete="email">
+          <span class="error" id="error-reg-email"></span>
+        </div>
 
-   <button type="submit" class="btn btn-primario" style="width:100%;margin-top:16px;">
-      Crear cuenta
-    </button>
+        <!-- CAMPO CONTRASEÑA -->
+        <div class="campo">
+          <label for="reg-password">Contraseña</label>
+          <input type="password" id="reg-password"
+                 placeholder="Mínimo 6 caracteres"
+                 autocomplete="new-password">
+          <span class="error" id="error-reg-password"></span>
+        </div>
 
-    <div id="registro-exito" style="display:none;margin-top:20px;padding:16px;background:#dcfce7;border-radius:8px;color:#166534;">
-      ✅ Cuenta creada correctamente. <a href="index.html">Ir a la tienda →</a>
-    </div>
-        
-  </form>
+        <!-- CAMPO DEPARTAMENTO -->
+        <div class="campo">
+          <label for="reg-departamento">Departamento</label>
+          <select id="reg-departamento">
+            <option value="">Cargando departamentos...</option>
+          </select>
+          <span class="error" id="error-reg-departamento"></span>
+        </div>
 
-  <div id="resumen-registro" style="display:none;"></div>
+        <!-- CAMPO MUNICIPIO -->
+        <div class="campo">
+          <label for="reg-municipio">Municipio</label>
+          <select id="reg-municipio" disabled>
+            <option value="">Primero elige un departamento</option>
+          </select>
+          <span class="error" id="error-reg-municipio"></span>
+        </div>
 
-</section>
+        <button type="submit" class="btn btn-primario" style="width:100%; margin-top:8px;">
+          Crear cuenta
+        </button>
+
+        <div id="registro-exito" style="display:none; margin-top:20px; padding:16px; background:#dcfce7; border-radius:8px; color:#166534;">
+          ✅ Cuenta creada correctamente. <a href="index.html">Ir a la tienda →</a>
+        </div>
+
+      </form>
+
+      <div id="resumen-registro" style="display:none;"></div>
+
+
+    </section>
 
   </main>
 
@@ -116,9 +133,9 @@
       <p>&copy; 2026 TechStore Pro — Todos los derechos reservados</p>
     </div>
   </footer>
-  
-<script src="js/main.js"></script>
-<script src="js/registro.js"></script>
+
+  <script src="js/main.js"></script>
+  <script src="js/registro.js"></script>
 
 </body>
 </html>

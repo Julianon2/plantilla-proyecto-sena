@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+@theme {
+  /* Base — blanco/negro puro */
+  --color-ink: #0A0A0A;
+  --color-paper: #FFFFFF;
+
+  /* Escala de grises neutros */
+  --color-gray-50: #FAFAFA;
+  --color-gray-100: #F2F2F2;
+  --color-gray-300: #D8D8D8;
+  --color-gray-500: #8A8A8A;
+  --color-gray-700: #4A4A4A;
+
+  /* Acento de marca — usar con moderación */
+  --color-accent: #FF4B2B;
+  --color-accent-dark: #D93A1E;
+
+  /* Tipografía */
+  --font-wordmark: 'Michroma', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Forma y profundidad */
+  --radius-card: 10px;
+  --shadow-float: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+@layer base {
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+  }
+}
