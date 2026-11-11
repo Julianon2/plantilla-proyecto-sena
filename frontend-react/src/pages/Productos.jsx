@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import ProductCard from "./ProductCard.jsx";
-import ProductoModal from "./ProductoModal.jsx";
+import ProductCard from "../components/ProductCard.jsx";
+import ProductoModal from "../components/ProductoModal.jsx";
 
 function precioNumero(p) {
   return Number(p.precio.replace(/\D/g, ""));

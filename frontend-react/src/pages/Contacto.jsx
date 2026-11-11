@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Campo, { claseInput } from "./Campo.jsx";
+import Campo, { claseInput } from "../components/Campo.jsx";
 
 const URL_API = "http://localhost:3000/api/contacto";
 

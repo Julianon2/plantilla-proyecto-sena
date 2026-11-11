@@ -1,8 +1,8 @@
 import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CartContext } from "./CartContext.jsx";
-import { AuthContext } from "./AuthContext.jsx";
-import { precioANumero, formatearPrecio } from "./utils/precio.js";
+import { CartContext } from "../context/CartContext.jsx";
+import { AuthContext } from "../context/AuthContext.jsx";
+import { precioANumero, formatearPrecio } from "../utils/precio.js";
 
 function Carrito() {
   const { items, cambiarCantidad, quitarDelCarrito, vaciarCarrito } =

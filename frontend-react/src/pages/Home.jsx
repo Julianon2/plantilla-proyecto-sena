@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import ProductCard from "./ProductCard.jsx";
-import ProductoModal from "./ProductoModal.jsx";
+import ProductCard from "../components/ProductCard.jsx";
+import ProductoModal from "../components/ProductoModal.jsx";
 
 function Home() {
   const navegar = useNavigate();

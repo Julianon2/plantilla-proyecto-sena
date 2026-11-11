@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
-import { CartContext } from "./CartContext.jsx";
+import { CartContext } from "../context/CartContext.jsx";
 
 function ProductoDetalle() {
   const { id } = useParams();

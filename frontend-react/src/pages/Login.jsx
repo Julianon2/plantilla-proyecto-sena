@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { AuthContext } from "./AuthContext.jsx";
-import Campo, { claseInput } from "./Campo.jsx";
+import { AuthContext } from "../context/AuthContext.jsx";
+import Campo, { claseInput } from "../components/Campo.jsx";
 
 const URL_API = "http://localhost:3000/api/auth";
 
