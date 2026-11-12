@@ -1,38 +1,68 @@
 const express        = require('express');
 const crypto         = require('crypto');   // nativo de Node
 const Orden          = require('../models/Orden');
+const Producto       = require('../models/Producto');
 const Transaccion    = require('../models/Transaccion');
 const verificarToken = require('../middleware/auth');
 const router         = express.Router();
 
 // POST /api/pagos/firma — generar firma de integridad para el Widget de Wompi
-// Valida el carrito, genera una referencia única, calcula la firma SHA256
-// y guarda los datos del pedido en Transaccion con estado PENDING.
+// El navegador solo dice QUÉ productos y CUÁNTOS: el total lo calcula este servidor
+// con los precios de la base de datos, porque lo que llega del navegador se puede alterar.
+// Luego genera una referencia única, calcula la firma SHA256 y guarda el pedido
+// en Transaccion con estado PENDING.
 router.post('/firma', verificarToken, async (req, res) => {
-  const { productos, total } = req.body;
+  const { productos } = req.body;
 
-  if (!productos?.length || !total) {
-    return res.status(400).json({ error: 'Carrito vacío o total inválido' });
+  if (!Array.isArray(productos) || productos.length === 0) {
+    return res.status(400).json({ error: 'Carrito vacío' });
+  }
+
+  // 1. Revisar cada línea: el id del producto y una cantidad entera de 1 en adelante
+  const lineas = [];
+  for (const p of productos) {
+    const id = Number(p?.id);
+    const cantidad = Number(p?.cantidad);
+    if (!Number.isInteger(id) || !Number.isInteger(cantidad) || cantidad < 1) {
+      return res.status(400).json({ error: 'Carrito con productos inválidos' });
+    }
+    lineas.push({ id, cantidad });
   }
 
   try {
-    // 1. Referencia única para esta transacción
+    // 2. Traer de la base los productos del carrito, con sus precios reales
+    const ids = lineas.map((l) => l.id);
+    const enBase = await Producto.find({ id: { $in: ids } });
+
+    // 3. El total lo calcula el servidor: precio ("$8.999.000" → 8999000) por cantidad.
+    //    De paso arma las líneas de la orden con el _id de MongoDB que guarda el modelo Orden
+    let total = 0;
+    const items = [];
+    for (const l of lineas) {
+      const prod = enBase.find((x) => x.id === l.id);
+      if (!prod) return res.status(400).json({ error: 'Carrito con productos inválidos' });
+      total += Number(prod.precio.replace(/[$.]/g, '')) * l.cantidad;
+      items.push({ producto: prod._id, cantidad: l.cantidad });
+    }
+    if (!total) return res.status(400).json({ error: 'No se pudo calcular el total' });
+
+    // 4. Referencia única para esta transacción
     const reference = `TS-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`;
     const amountInCents = Math.round(total * 100);
     const currency = 'COP';
 
-    // 2. Calcular firma de integridad — fórmula oficial Wompi
+    // 5. Calcular firma de integridad — fórmula oficial Wompi
     const raw = `${reference}${amountInCents}${currency}${process.env.WOMPI_INTEGRITY_SECRET}`;
     const signature = crypto.createHash('sha256').update(raw).digest('hex');
 
-    // 3. Guardar datos del carrito en la Transaccion con estado PENDING
+    // 6. Guardar el carrito (ya validado) y el total en la Transaccion con estado PENDING
     await Transaccion.create({
       wompiReference: reference, amountInCents, currency,
       status: 'PENDING',
-      pendingOrderData: { usuario: req.usuario.id, productos, total }
+      pendingOrderData: { usuario: req.usuario.id, productos: items, total }
     });
 
-    // 4. Devolver datos al Widget de Wompi en el frontend
+    // 7. Devolver datos al Widget de Wompi en el frontend
     res.json({
       reference, amountInCents, currency, signature,
       publicKey: process.env.WOMPI_PUBLIC_KEY
