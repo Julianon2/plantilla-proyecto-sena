@@ -10,6 +10,7 @@ import Login from "./pages/Login.jsx";
 import Registro from "./pages/Registro.jsx";
 import Carrito from "./pages/Carrito.jsx";
 import PagoResultado from "./pages/PagoResultado.jsx";
+import MisPedidos from "./pages/MisPedidos.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Route path="/registro" element={<Registro />} />
           <Route path="/carrito" element={<Carrito />} />
           <Route path="/pago/:referencia" element={<PagoResultado />} />
+          <Route path="/mis-pedidos" element={<MisPedidos />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

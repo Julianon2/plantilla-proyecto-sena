@@ -75,13 +75,15 @@ router.patch('/:id/estado', verificarToken, verificarAdmin, async (req, res) => 
 });
 
 // GET /api/ordenes — mis órdenes
-// Cada usuario ve solo sus propias órdenes
+// Cada usuario ve solo sus propias órdenes: el servidor sabe quién es por el token
+// (req.usuario.id), no por un dato que mande el navegador.
+// Las más nuevas primero, y con el nombre, el precio y la imagen de cada producto.
 router.get('/', verificarToken, async (req, res) => {
   try {
     const ordenes = await Orden
       .find({ usuario: req.usuario.id })
-      .populate('usuario', 'nombre email')
-      .populate('productos.producto', 'nombre precio');
+      .populate('productos.producto', 'nombre precio imagen')
+      .sort({ createdAt: -1 });
     res.json(ordenes);
   } catch (err) {
     res.status(500).json({ error: err.message });

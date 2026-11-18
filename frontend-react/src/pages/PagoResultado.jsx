@@ -63,12 +63,20 @@ function PagoResultado() {
       <p className="font-mono text-xs text-gray-500">Referencia: {referencia}</p>
 
       {estado === "APPROVED" && (
-        <Link
-          to="/productos"
-          className="bg-ink text-paper px-6 py-3 rounded-card text-sm font-semibold hover:bg-accent transition-colors"
-        >
-          Seguir comprando
-        </Link>
+        <div className="flex flex-wrap justify-center gap-3">
+          <Link
+            to="/mis-pedidos"
+            className="bg-ink text-paper px-6 py-3 rounded-card text-sm font-semibold hover:bg-accent transition-colors"
+          >
+            Ver mis pedidos
+          </Link>
+          <Link
+            to="/productos"
+            className="px-6 py-3 rounded-card text-sm font-semibold border border-gray-300 hover:border-ink transition-colors"
+          >
+            Seguir comprando
+          </Link>
+        </div>
       )}
       {estado !== "PENDING" && estado !== "APPROVED" && (
         <Link
