@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import { CartContext } from "../context/CartContext.jsx";
+import BotonFavorito from "../components/BotonFavorito.jsx";
 
 function ProductoDetalle() {
   const { id } = useParams();
@@ -86,12 +87,22 @@ function ProductoDetalle() {
             {producto.descripcion}
           </p>
           <p className="font-mono text-3xl font-bold">{producto.precio}</p>
-          <button
-            onClick={agregar}
-            className="mt-4 bg-ink text-paper rounded-card py-4 text-sm font-semibold hover:bg-accent transition-colors"
-          >
-            Agregar al carrito
-          </button>
+          <div className="mt-4 flex items-center gap-3">
+            <button
+              onClick={agregar}
+              className="flex-1 bg-ink text-paper rounded-card py-4 text-sm font-semibold hover:bg-accent transition-colors"
+            >
+              Agregar al carrito
+            </button>
+            <BotonFavorito
+              producto={{
+                id: producto.id,
+                nombre: producto.nombre,
+                precio: producto.precio,
+                imagen: producto.imagen,
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

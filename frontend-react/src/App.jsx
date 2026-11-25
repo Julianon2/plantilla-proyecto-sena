@@ -14,6 +14,8 @@ import MisPedidos from "./pages/MisPedidos.jsx";
 import Cuenta from "./pages/Cuenta.jsx";
 import CuentaResumen from "./pages/CuentaResumen.jsx";
 import CuentaPerfil from "./pages/CuentaPerfil.jsx";
+import CuentaFavoritos from "./pages/CuentaFavoritos.jsx";
+import CuentaSeguridad from "./pages/CuentaSeguridad.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
 function App() {
@@ -35,6 +37,8 @@ function App() {
             <Route index element={<CuentaResumen />} />
             <Route path="perfil" element={<CuentaPerfil />} />
             <Route path="pedidos" element={<MisPedidos />} />
+            <Route path="favoritos" element={<CuentaFavoritos />} />
+            <Route path="seguridad" element={<CuentaSeguridad />} />
           </Route>
           <Route path="/mis-pedidos" element={<Navigate to="/cuenta/pedidos" replace />} />
           <Route path="*" element={<NotFound />} />

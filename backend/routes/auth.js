@@ -114,5 +114,70 @@ router.get("/perfil", verificarToken, async (req, res) => {
   }
 });
 
-// 5. Exportar el router
+// 5. PUT /api/auth/perfil — la persona cambia sus datos
+// Solo se aceptan estos tres campos. El correo y el rol NO se leen del cuerpo:
+// lo que manda el navegador no es de fiar (el mismo principio del registro).
+router.put("/perfil", verificarToken, async (req, res) => {
+  try {
+    const { nombre, departamento, municipio } = req.body;
+
+    if (typeof nombre !== "string" || nombre.trim().length < 3) {
+      return res.status(400).json({ error: "El nombre debe tener al menos 3 caracteres" });
+    }
+    if (!departamento || !municipio) {
+      return res.status(400).json({ error: "Selecciona un departamento y un municipio" });
+    }
+
+    // req.usuario.id sale del token: cada persona solo puede cambiar sus propios datos
+    const usuario = await Usuario.findByIdAndUpdate(
+      req.usuario.id,
+      { nombre: nombre.trim(), departamento, municipio },
+      { new: true, runValidators: true },
+    ).select("-password");
+    if (!usuario)
+      return res.status(404).json({ error: "Usuario no encontrado" });
+
+    res.json(usuario);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 6. PUT /api/auth/password — cambiar la contraseña
+// Pide la actual: así, quien encuentre una sesión abierta no puede quedarse con la cuenta.
+router.put("/password", verificarToken, async (req, res) => {
+  try {
+    const { actual, nueva } = req.body;
+
+    if (typeof actual !== "string" || !actual) {
+      return res.status(400).json({ error: "Escribe tu contraseña actual" });
+    }
+    if (typeof nueva !== "string" || nueva.length < 6) {
+      return res.status(400).json({ error: "La nueva contraseña debe tener al menos 6 caracteres" });
+    }
+
+    const usuario = await Usuario.findById(req.usuario.id);
+    if (!usuario)
+      return res.status(404).json({ error: "Usuario no encontrado" });
+
+    // Comparar lo que escribió con el hash guardado
+    const correcta = await bcrypt.compare(actual, usuario.password);
+    if (!correcta) {
+      // 400 y no 401: la sesión está bien, lo que está mal es el dato
+      return res.status(400).json({ error: "La contraseña actual no es correcta" });
+    }
+    if (actual === nueva) {
+      return res.status(400).json({ error: "La nueva contraseña debe ser distinta de la actual" });
+    }
+
+    usuario.password = await bcrypt.hash(nueva, 10);
+    await usuario.save();
+
+    res.json({ mensaje: "Contraseña actualizada" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 7. Exportar el router
 module.exports = router;

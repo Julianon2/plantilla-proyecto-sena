@@ -14,7 +14,14 @@ const SECCIONES = [
   },
   {
     titulo: "Compras",
-    enlaces: [{ ruta: "/cuenta/pedidos", texto: "Mis pedidos" }],
+    enlaces: [
+      { ruta: "/cuenta/pedidos", texto: "Mis pedidos" },
+      { ruta: "/cuenta/favoritos", texto: "Favoritos" },
+    ],
+  },
+  {
+    titulo: "Seguridad",
+    enlaces: [{ ruta: "/cuenta/seguridad", texto: "Cambiar contraseña" }],
   },
 ];
 
