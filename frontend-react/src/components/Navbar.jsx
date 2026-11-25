@@ -54,10 +54,10 @@ function Navbar() {
           {usuario ? (
             <div className="hidden md:flex items-center gap-4">
               <Link
-                to="/mis-pedidos"
+                to="/cuenta"
                 className="text-sm font-medium text-gray-700 hover:text-ink transition-colors"
               >
-                Mis pedidos
+                Mi cuenta
               </Link>
               <span className="text-sm font-semibold">Hola, {usuario}</span>
               <button
@@ -145,11 +145,11 @@ function Navbar() {
               {usuario ? (
                 <div className="flex flex-col gap-5">
                   <Link
-                    to="/mis-pedidos"
+                    to="/cuenta"
                     onClick={cerrar}
                     className="font-display font-semibold text-3xl tracking-tight text-gray-500"
                   >
-                    Mis pedidos
+                    Mi cuenta
                   </Link>
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-semibold">Hola, {usuario}</span>

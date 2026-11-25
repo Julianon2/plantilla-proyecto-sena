@@ -1,66 +1,10 @@
-import { useState, useEffect, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext.jsx";
+import { Link } from "react-router-dom";
+import useApi from "../hooks/useApi.js";
 import TimelinePedido, { textoEstado } from "../components/TimelinePedido.jsx";
 import { formatearPrecio } from "../utils/precio.js";
 
 function MisPedidos() {
-  const { usuario, logout } = useContext(AuthContext);
-  const navegar = useNavigate();
-  const [pedidos, setPedidos] = useState([]);
-  const [cargando, setCargando] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    // Sin sesión no hay nada que pedir al servidor
-    if (!usuario) return;
-
-    async function cargar() {
-      try {
-        const respuesta = await fetch("http://localhost:3000/api/ordenes", {
-          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
-        });
-
-        // 401: no hay token. 403: el token ya no sirve (venció o está mal).
-        // En los dos casos se cierra la sesión y se manda a ingresar de nuevo.
-        if (respuesta.status === 401 || respuesta.status === 403) {
-          logout();
-          navegar("/login", {
-            state: {
-              aviso: "Tu sesión terminó. Ingresa de nuevo para ver tus pedidos",
-              desde: "/mis-pedidos",
-            },
-          });
-          return;
-        }
-        if (!respuesta.ok) throw new Error("respuesta no válida");
-
-        setPedidos(await respuesta.json());
-      } catch {
-        setError("No se pudieron cargar tus pedidos. Revisa que el backend esté encendido.");
-      } finally {
-        setCargando(false);
-      }
-    }
-    cargar();
-  }, []);
-
-  if (!usuario) {
-    return (
-      <section className="max-w-md mx-auto text-center flex flex-col items-center gap-5 py-16">
-        <h1 className="font-display font-bold text-4xl tracking-tighter">
-          Inicia sesión para ver tus pedidos<span className="text-accent">.</span>
-        </h1>
-        <Link
-          to="/login"
-          state={{ aviso: "Inicia sesión para ver tus pedidos", desde: "/mis-pedidos" }}
-          className="bg-ink text-paper px-6 py-3 rounded-card text-sm font-semibold hover:bg-accent transition-colors"
-        >
-          Ingresar
-        </Link>
-      </section>
-    );
-  }
+  const { datos: pedidos, cargando, error } = useApi("/api/ordenes");
 
   if (cargando) {
     return <p className="py-16 text-center text-gray-700">Cargando tus pedidos…</p>;

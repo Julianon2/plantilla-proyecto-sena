@@ -65,7 +65,7 @@ function PagoResultado() {
       {estado === "APPROVED" && (
         <div className="flex flex-wrap justify-center gap-3">
           <Link
-            to="/mis-pedidos"
+            to="/cuenta/pedidos"
             className="bg-ink text-paper px-6 py-3 rounded-card text-sm font-semibold hover:bg-accent transition-colors"
           >
             Ver mis pedidos

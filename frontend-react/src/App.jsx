@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import Home from "./pages/Home.jsx";
@@ -11,6 +11,9 @@ import Registro from "./pages/Registro.jsx";
 import Carrito from "./pages/Carrito.jsx";
 import PagoResultado from "./pages/PagoResultado.jsx";
 import MisPedidos from "./pages/MisPedidos.jsx";
+import Cuenta from "./pages/Cuenta.jsx";
+import CuentaResumen from "./pages/CuentaResumen.jsx";
+import CuentaPerfil from "./pages/CuentaPerfil.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
 function App() {
@@ -28,7 +31,12 @@ function App() {
           <Route path="/registro" element={<Registro />} />
           <Route path="/carrito" element={<Carrito />} />
           <Route path="/pago/:referencia" element={<PagoResultado />} />
-          <Route path="/mis-pedidos" element={<MisPedidos />} />
+          <Route path="/cuenta" element={<Cuenta />}>
+            <Route index element={<CuentaResumen />} />
+            <Route path="perfil" element={<CuentaPerfil />} />
+            <Route path="pedidos" element={<MisPedidos />} />
+          </Route>
+          <Route path="/mis-pedidos" element={<Navigate to="/cuenta/pedidos" replace />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

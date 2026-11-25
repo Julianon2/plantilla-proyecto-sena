@@ -1,6 +1,6 @@
 // Los pasos normales de un pedido, en orden. La orden solo existe después de un pago aprobado,
 // así que siempre arranca en PAGO_CONFIRMADO.
-const PASOS = [
+export const PASOS = [
   { estado: "PAGO_CONFIRMADO", texto: "Pago confirmado" },
   { estado: "procesando", texto: "Procesando" },
   { estado: "enviado", texto: "Enviado" },
